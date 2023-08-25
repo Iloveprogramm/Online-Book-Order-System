@@ -6,6 +6,6 @@ A bookstore website
 
 **Development Tools**
 
-- Backend - Java 
-- Frontend - JSP 
+- Backend - Php
+- Frontend - Html,css,js
 - Database - MySQL
