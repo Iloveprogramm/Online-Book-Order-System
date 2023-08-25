@@ -9,3 +9,4 @@ A bookstore website
 - Backend - Php
 - Frontend - Html,css,js
 - Database - MySQL
+- Server   - Xampp
