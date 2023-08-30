@@ -11,7 +11,9 @@ PHP offers dynamic content that interacts smoothly with databases, making it an 
 
 2.Frontend:
 HTML: For structuring the website's content.
+
 CSS: To stylize and ensure a responsive design suitable for all devices.
+
 JavaScript (JS): For creating interactive web pages, form validations, and dynamically loading content.
 
 3.Database: MySQL
