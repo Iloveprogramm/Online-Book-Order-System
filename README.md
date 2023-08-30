@@ -5,9 +5,13 @@
 An online platform for book enthusiasts to explore, select, and purchase their favorite reads from the comfort of their home. The website aims to provide an easy-to-use interface for all age groups.
 
 Team：
+
 Chenjun Zheng(Team Leader)  (JM)
+
 Yuxin Liu(Team member)     ()
+
 Mandana Ebrahimian(Team member)
+
 Matthew Georgans(Team member)
 
 Development Tools:
