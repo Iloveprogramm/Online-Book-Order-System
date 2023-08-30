@@ -15,7 +15,7 @@ Mandana Ebrahimian(Team member)
 
 Matthew Georgans(Team member)
 
-# Development Tools:
+# Development Language:
 
 1.Backend: 
 
@@ -41,11 +41,10 @@ MySQL
 
 A reliable and scalable database system that integrates well with PHP.
 
+# IDE(Visual studio) and Server(Xampp)
+Visual Studio is an integrated development environment (IDE) developed by Microsoft. It is used to develop computer programs, web sites, web apps, web services, and mobile apps. 
+
+XAMPP is a free and open-source cross-platform web server solution stack package, consisting mainly of the Apache HTTP Server, MySQL database, and interpreters for scripts 
 
 
-4.Server:
-
-Xampp
-
-Provides an easy-to-use Apache-MySQL-PHP environment. Perfect for local development and testing.
 
