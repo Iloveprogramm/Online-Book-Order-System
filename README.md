@@ -30,7 +30,7 @@ Matthew Georgans(Team member)
 1. Reviews & Comments
 2. Search
 
-**Matthew:**
+**Matthew Georgans:**
 1. Shipping Management
 2. Wishlist Management
 
