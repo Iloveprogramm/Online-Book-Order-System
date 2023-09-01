@@ -15,6 +15,26 @@ Mandana Ebrahimian(Team member)
 
 Matthew Georgans(Team member)
 
+
+## Team Responsibilities
+
+**Chenjun Zheng:**
+1. Book Management
+2. Order Management
+
+**Yuxin Liu:**
+1. User Management
+2. Payment Management
+
+**Mandana Ebrahimian:**
+1. Reviews & Comments
+2. Search
+
+**Matthew:**
+1. Shipping Management
+2. Wishlist Management
+
+
 # Development Language:
 
 1.Backend: 
