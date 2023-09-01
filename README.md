@@ -9,7 +9,7 @@ An online platform for book enthusiasts to explore, select, and purchase their f
 
 Chenjun Zheng(Team Leader)  (JM)
 
-Yuxin Liu(Team member)     ()
+Yuxin Liu(Team member)     (Alyss)
 
 Mandana Ebrahimian(Team member)
 
