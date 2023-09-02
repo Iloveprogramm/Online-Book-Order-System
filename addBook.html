@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book | BookQuartet</title>
+
+    <!-- TailwindCSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#page-container {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#content-wrap {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0; 
+}
+
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+<div id="page-container">
+    <div id="content-wrap">
+
+        <!-- Navigation -->
+        <nav class="bg-black p-6 text-white shadow-md">
+            <div class="container mx-auto">
+                <a class="text-2xl font-bold" href="#">BookQuartet</a>
+                <ul class="float-right mt-1">
+                    <li class="inline ml-6">
+                        <a class="hover:text-gray-300" href="bookManagement.html">
+                            <i class="fas fa-arrow-left"></i> Back to Book Management
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mx-auto mt-10 p-5 bg-white rounded-lg shadow-md" data-aos="fade-up">
+            <h2 class="text-3xl font-semibold mb-5">Add a Book</h2>
+
+            <form id="addBookForm">
+                <div class="mb-3">
+                    <label for="title" class="block mb-2 font-medium">Title:</label>
+                    <input type="text" id="title" name="bookTitle" class="form-input px-4 py-3 w-full bg-gray-200">
+                </div>
+
+                <div class="mb-3">
+                    <label for="author" class="block mb-2 font-medium">Author:</label>
+                    <input type="text" id="author" name="bookAuthor" class="form-input px-4 py-3 w-full bg-gray-200">
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="block mb-2 font-medium">Price:</label>
+                    <input type="text" id="price" name="bookPrice" class="form-input px-4 py-3 w-full bg-gray-200">
+                </div>
+
+                <div class="mb-3">
+                    <label for="imgUrl" class="block mb-2 font-medium">Cover Image URL:</label>
+                    <input type="text" id="imgUrl" name="bookImgUrl" class="form-input px-4 py-3 w-full bg-gray-200">
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="block mb-2 font-medium">Category:</label>
+                    <select id="category" name="bookCategory" class="form-select px-4 py-3 w-full bg-gray-200">
+                        <option selected>Choose Category</option>
+                        <option value="novel">Novel</option>
+                        <option value="education">Education</option>
+                        <option value="programming">Programming</option>
+                        <option value="cartoon">Cartoon</option>
+                        <option value="history">History</option>
+                    </select>
+                </div>
+
+                <input type="submit" value="Add Book" class="mt-4 p-2 bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black p-6 mt-10 text-white text-center">
+        <span>&copy; 2023 BookQuartets. All Rights Reserved.</span>
+    </footer>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    AOS.init({
+        duration: 1000
+    });
+
+    document.querySelector('#addBookForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let formData = new FormData(e.target);
+
+        fetch('addBookToDatabase.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "bookManagement.html";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Yes'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'There are some problems, please try again later。',
+                icon: 'error',
+                confirmButtonText: 'Yes'
+            });
+        });
+    });
+</script>
+</body>
+
+</html>
