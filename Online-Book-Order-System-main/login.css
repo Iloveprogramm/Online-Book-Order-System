@@ -1,0 +1,76 @@
+body {
+    font-family: "Comic Sans MS";
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, purple);
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    height: 100vh;
+    margin: 0;
+}
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+h2 {
+    font-size: 30px;
+    color: black;
+    margin-bottom: 30px;
+}
+
+.input-form {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #C0C0C0;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    font-family: "Comic Sans MS";
+    font-size: 16px;
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, purple);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-size: 200% 100%;
+    transition: background-position 0.2s;
+}
+
+button:hover {
+    background-position: -100% 0;
+}
+
+.register {
+    margin-top: 20px;
+}
+
+.register a {
+    color: #9A81FF;
+    transition: color 0.3s ease;
+}
+
+.register a:hover {
+    color: #7B5FE3;
+}
