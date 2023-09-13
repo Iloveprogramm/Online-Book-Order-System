@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="register.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="input-form">
+                    <input type="text" id="username" name="username" placeholder="Please enter your email address" required>
+                </div>
+                <div class="input-form">
+                    <input type="password" id="password" name="password" placeholder="Please enter your password" required>
+                </div>
+                <div class="input-form">
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Please confirm your password" required>
+                </div>
+                <button type="submit">Submit</button>
+                <p class="login">Already have an account? <a href="login.html">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#registerForm").on("submit", function(event) {
+                event.preventDefault(); 
+                
+                const password = $("#password").val();
+                const confirmPassword = $("#confirm-password").val();
+                
+                if (password !== confirmPassword) {
+                    alert("Passwords do not match.");
+                    return;
+                }
+                
+                $.ajax({
+                    type: "POST",
+                    url: "register.php",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status === "success") {
+                            alert("Registration successful!");
+                            window.location.href = "login.html";  
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("An error occurred: " + textStatus);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
