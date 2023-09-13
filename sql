@@ -21,3 +21,12 @@ CREATE TABLE UserTable (
     user_id VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE Wishlist (
+    user_id INT,
+    book_id INT,
+    date_added DATE NOT NULL,
+    PRIMARY KEY (user_id, book_id),
+    FOREIGN KEY (user_id) REFERENCES UserTable(id),
+    FOREIGN KEY (book_id) REFERENCES Books(BookID)
+);
