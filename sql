@@ -7,7 +7,7 @@ CREATE TABLE Books (
     Category VARCHAR(255) NOT NULL
 );
 
-INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES 
+INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES
 ('Thinking in Java', 'Bruce Eckel', 99.00, './Image/Effective Java Programming.png', 'Programming'),
 ('The Marxification of Education', 'James Lindsay', 28.48, './Image/The Marxification of Education(Education).png', 'Education'),
 ('Reminders of Him', 'Colleen Hoover', 16.00, './Image/Reminders of Him(Novel).png', 'Novel'),
@@ -30,3 +30,20 @@ CREATE TABLE Wishlist (
     FOREIGN KEY (user_id) REFERENCES UserTable(id),
     FOREIGN KEY (book_id) REFERENCES Books(BookID)
 );
+
+CREATE TABLE Reviews (
+    ReviewID INT AUTO_INCREMENT PRIMARY KEY,
+    BookID INT NOT NULL,
+    ReviewerName VARCHAR(255) NOT NULL,
+    Rating INT NOT NULL,
+    ReviewText TEXT,
+    ReviewDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+);
+
+INSERT INTO Reviews (BookID, ReviewerName, Rating, ReviewText) VALUES
+(1, 'John Doe', 4, 'Great book! I loved the characters and the plot.'),
+(2, 'Jane Smith', 5, 'An absolute masterpiece. This book is a must-read for everyone.'),
+(3, 'Alice Johnson', 3, 'The book was okay, but it could have been better.'),
+(4, 'Bob Wilson', 4, 'Enjoyed reading it. The author did a great job.'),
+(5, 'Eva Brown', 5, 'One of the best books I have ever read. Highly recommended.');
