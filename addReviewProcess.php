@@ -1,6 +1,4 @@
 <?php
-header('Content-Type: application/json');
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -23,12 +21,6 @@ $bookID = $_POST['bookID']; // TODO: Need to get book ID from title instead of u
 $reviewerName = $_POST['reviewerName'];
 $rating = $_POST['rating'];
 $reviewText = $_POST['reviewText'];
-
-if ($stmt->execute()) {
-    echo json_encode(['status' => 'success', 'message' => 'Review added successfully!']);
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
-}
 
 $stmt->close();
 $conn->close();

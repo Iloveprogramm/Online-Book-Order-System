@@ -177,6 +177,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="exploreBooks.php">
+                        <i class="fas fa-star"></i> Explore
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reviewMain.html">
+                        <i class="fas fa-star"></i> Reviews
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="Welcome.html">
 
                         <i class="fas fa-sign-out-alt"></i> Logout

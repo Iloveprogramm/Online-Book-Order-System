@@ -159,6 +159,7 @@ session_start();
 <body>
 
 <!-- Navigation -->
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="#">BookQuartet</a>
@@ -175,12 +176,23 @@ session_start();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Main.php">
-                        <i class="fas fa-home"></i> Home
+                    <a class="nav-link" href="Wishlist.php">
+                        <i class="fas fa-star"></i> Wishlist
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="exploreBooks.php">
+                        <i class="fas fa-star"></i> Explore
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reviewMain.html">
+                        <i class="fas fa-star"></i> Reviews
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Welcome.html">
+
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>
