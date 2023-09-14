@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="userprofile.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        <div class="username-display">
+            <span id="username"></span>
+        </div>
+        <div class="profile-box">
+            <form id="profile-form">
+                <div class="input-form">
+                    <label for="old-password">Old Password:</label>
+                    <input type="password" id="old-password" name="old-password" disabled placeholder="Enter old password">
+                </div>
+                <div class="input-form">
+                    <label for="new-password">New Password:</label>
+                    <input type="password" id="new-password" name="new-password" disabled placeholder="Enter new password">
+                </div>
+                <div class="input-form">
+                    <label for="confirm-password">Confirm New Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" disabled placeholder="Confirm new password">
+                </div>
+                <div class="button-container">
+                    <button type="button" class="edit-button" onclick="editProfile()">Edit</button>
+                    <button type="button" class="save-button" id="save-button" disabled onclick="saveChanges()">Save</button>
+                </div>
+            </form>
+            <p><a href="Main.php">Back to Main Page</a></p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.get("get-username.php", function(data) {
+                $("#username").text(data);
+            });
+            
+            // Validate old password when it loses focus
+            $('#old-password').blur(validateOldPassword);
+        });
+
+        function editProfile() {
+            $('#old-password, #new-password, #confirm-password').prop('disabled', false);
+        }
+
+        function saveChanges() {
+            const oldPassword = $('#old-password').val();
+            const newPassword = $('#new-password').val();
+            const confirmPassword = $('#confirm-password').val();
+            const userId = $('#username').text(); 
+
+            if (newPassword !== confirmPassword) {
+                alert('Oops! No match.');
+                return;
+            }
+
+            $.post("update-password.php", { newPassword: newPassword, user_id: userId })
+                .done(function(response) {
+                    if (response === 'success') {
+                        alert('Hooray! Your password is reborn!');
+                    } else {
+                        alert('Oops! An error occurred.');
+                    }
+                })
+                .fail(function() {
+                    alert('Uh-oh! Cannot reach the server right now.');
+                });
+        }
+
+        function validateOldPassword() {
+            const oldPassword = $('#old-password').val();
+            const userId = $('#username').text(); 
+            
+            $.post("validate-password.php", { oldPassword: oldPassword, user_id: userId })
+                .done(function(response) {
+                    if (response === 'success') {
+                        $('#new-password, #confirm-password').prop('disabled', false);
+                        $('#save-button').prop('disabled', false);
+                    } else {
+                        alert('Oopsie-daisy! That is not the right old password. Cannot switch it up yet.');
+                        $('#new-password, #confirm-password').prop('disabled', true);
+                        $('#save-button').prop('disabled', true);
+                    }
+                })
+                .fail(function() {
+                    alert('Uh-oh! Cannot reach the server right now.');
+                });
+        }
+
+        function checkPasswordMatch() {
+            const newPassword = $('#new-password').val();
+            const confirmPassword = $('#confirm-password').val();
+
+            if (newPassword !== confirmPassword) {
+                alert('Aww, your passwords are not playing nice! Make them match to move on!');
+            }
+        }
+    </script>
+</body>
+</html>

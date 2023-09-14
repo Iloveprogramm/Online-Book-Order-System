@@ -114,6 +114,42 @@
     margin-bottom: 10px;
 }
 
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
     </style>
 </head>
 
@@ -124,11 +160,28 @@
     <div class="container">
         <a class="navbar-brand" href="#">BookQuartet</a>
         <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-    <li class="nav-item">
-        <a class="nav-link" href="bookManagement.html"><i class="fas fa-cogs"></i> Book Managements</a>
-    </li>
-</ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="bookManagement.html"><i class="fas fa-cogs"></i> Book Managements</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="userprofile.html">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Wishlist.php">
+                        <i class="fas fa-star"></i> Wishlist
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Welcome.html">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
@@ -212,6 +265,7 @@
             echo '<p class="card-text mb-2">$' . number_format($row["Price"], 2) . '</p>';
             echo '<a href="Cart.html" class="btn btn-outline-primary mt-auto">Purchase</a>';
             echo '<a href="/category/' . strtolower($row["Category"]) . '" class="btn btn-outline-secondary mt-auto">Explore Category</a>';
+            echo '<button class="btn btn-outline-primary mt-auto" onclick="addToWishlist(' . $row["BookID"] . ')">Wishlist</button>';
             echo '</div>';
             echo '</div>';
             echo '</div>';
@@ -225,6 +279,56 @@
 
     </div>
 </div>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <p id="statusMessage"></p>
+  </div>
+</div>
+
+<script>
+    var modal = document.getElementById("myModal"); // Declare modal outside the function
+
+    // Close the modal when the close button is clicked
+    var closeModalBtn = document.getElementById("closeModal");
+
+    closeModalBtn.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    function addToWishlist(bookId) {
+        var xhr = new XMLHttpRequest();
+        var url = "add-To-Wishlist.php?book_id=" + bookId;
+        xhr.open("GET", url, true);
+
+        xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+        var modal = document.getElementById("myModal");
+        var statusMessage = document.getElementById("statusMessage");
+
+        try {
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.status === "success") {
+                // Success message
+                statusMessage.innerHTML = response.message;
+            } else {
+                // Error or info message
+                statusMessage.innerHTML = response.message;
+            }
+        } catch (error) {
+            // Handle JSON parsing error (unexpected response)
+            statusMessage.innerHTML = "Error: Unexpected response from the server.";
+        }
+
+        // Display the modal
+        modal.style.display = "block";
+    }
+};
+
+        xhr.send();
+    }
+</script>
 
 
 <!-- Footer -->
