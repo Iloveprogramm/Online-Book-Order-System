@@ -254,7 +254,7 @@ session_start();
                 echo '<button type="button" class="btn btn-sm btn-outline-secondary">View</button>';
                 echo '<button type="button" class="btn btn-sm btn-outline-secondary">Add</button>';
                 echo '</div>';
-                echo '<small class="text-body-secondary">' . $row["Genre"] . '</small>';
+                echo '<small class="text-body-secondary">' . $row["Category"] . '</small>';
                 echo '</div>';
                 echo '</div>';
                 echo '</div>';
