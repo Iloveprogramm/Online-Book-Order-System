@@ -34,12 +34,13 @@ steps:
   inputs:
     versionSpec: '3.x'
     addToPath: true
-- bash: |
+
+- script: |
     sudo apt-get update
     sudo apt-get install mysql-client -y
-    mysql --host={"localhost"} --user={"root"} --password={""} -e 'source database.sql'
+    mysql --host=localhost --user=root --password="" -e 'source database.sql'
+  displayName: 'Execute SQL script'
   env:
     database_host: "localhost"
     database_user: "root"
     database_password: ""
-  displayName: 'Execute SQL script'
