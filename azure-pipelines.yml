@@ -38,6 +38,7 @@ steps:
 - script: |
     sudo apt-get update
     sudo apt-get install mysql-client -y
+    sudo apt-get install mysql-server -y
     mysql --host=localhost --user=root --password="" -e 'USE bookonlineorder; source database.sql'
   displayName: 'Execute SQL script'
   env:
