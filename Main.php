@@ -172,6 +172,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="Wishlist.php">
+                        <i class="fas fa-star"></i> Wishlist
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="welcome.html">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
