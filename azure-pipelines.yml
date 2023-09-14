@@ -1,62 +1,19 @@
-# # Starter pipeline
-# # Start with a minimal pipeline that you can customize to build and deploy your code.
-# # Add steps that build, run tests, deploy, and more:
-# # https://aka.ms/yaml
-
-# trigger:
-# - main
-
-# pool:
-#   vmImage: ubuntu-latest
-
-# steps:
-# - script: echo Hello, world!
-#   displayName: 'Run a one-line script'
-
-# - script: |
-#     echo Add other tasks to build, test, and deploy your project.
-#     echo See https://aka.ms/yaml
-#   displayName: 'Run a multi-line script'
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
 
 trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-
-# - script: |
-#     sudo apt-get update
-#     sudo apt-get install -y apache2
-#     sudo apt-get install -y php libapache2-mod-php php-mysql
-#     sudo /opt/lampp/lampp start
-#   displayName: 'Install Apache & PHP'
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
 
 - script: |
-    wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
-    sudo dpkg -i mysql-apt-config_0.8.15-1_all.deb
-    sudo apt-get update
-    sudo apt-get install -y mysql-server
-  displayName: 'Install MySQL'
-
-- script: |
-    mysql -u root -e "CREATE DATABASE IF NOT EXISTS mydatabase;"
-    mysql -u root bookonlineorder < ./database.sql
-  displayName: 'Create Database'
-
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    artifactName: 'drop'
-    artifactPath: '$(Build.ArtifactStagingDirectory)'
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
