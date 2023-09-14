@@ -29,12 +29,12 @@ steps:
   inputs:
     versionSpec: '3.x'
 
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y apache2
-    sudo apt-get install -y php libapache2-mod-php php-mysql
-    sudo /opt/lampp/lampp start
-  displayName: 'Install Apache & PHP'
+# - script: |
+#     sudo apt-get update
+#     sudo apt-get install -y apache2
+#     sudo apt-get install -y php libapache2-mod-php php-mysql
+#     sudo /opt/lampp/lampp start
+#   displayName: 'Install Apache & PHP'
 
 - script: |
     wget <https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb>
