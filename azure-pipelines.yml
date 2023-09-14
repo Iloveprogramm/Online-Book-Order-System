@@ -43,4 +43,3 @@ steps:
     database_user: "root"
     database_password: ""
   displayName: 'Execute SQL script'
-

@@ -14,8 +14,7 @@ INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES
 ('The Complete Far Side', 'Gary Larson', 200.00, './Image/The Complete Far Side(Cartoon).png', 'Cartoon'),
 ('History of the World Map by Map', 'DK', 70.61, './Image/History of the World Map by Map.png', 'History');
 
-CREATE DATABASE UserDB;
-USE UserDB;
+
 CREATE TABLE UserTable (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(100) UNIQUE NOT NULL,
