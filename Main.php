@@ -178,6 +178,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Welcome.html">
+
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>
