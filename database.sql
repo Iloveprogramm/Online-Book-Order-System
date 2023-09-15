@@ -47,4 +47,3 @@ INSERT INTO Reviews (BookID, ReviewerName, Rating, ReviewText) VALUES
 (4, 'Bob Wilson', 4, 'Enjoyed reading it. The author did a great job.'),
 (5, 'Eva Brown', 5, 'One of the best books I have ever read. Highly recommended.');
 
-test
