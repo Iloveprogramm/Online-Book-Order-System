@@ -137,10 +137,10 @@ echo '</div>';
             ?>
         </div>
         <div id="checkout-section" style="margin-top: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
-                <span style="font-weight: bold; font-size: 20px;">Subtotal</span>
-                <span style="font-size: 20px;">$0.00</span>
-            </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
+    <span style="font-weight: bold; font-size: 20px;">Subtotal</span>
+    <span id="subtotal" style="font-size: 20px;">$0.00</span> <!-- 添加了 id="subtotal" -->
+</div>
             <button style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
             <div style="text-align: center; font-size: 12px; color: grey; margin-bottom: 10px;">Secured by BookQuartet</div>
             <div style="display: flex; justify-content: center;">
@@ -191,11 +191,27 @@ echo '</div>';
         $.post('update_quantity.php', {book_id: bookId, quantity: newQuantity}, function(data) {
             if (data.status === "success") {
                 console.log('Quantity updated successfully');
+                calculateSubtotal(); // 计算购物车总价
             } else {
                 alert('There was an error updating the quantity. Please try again.');
             }
         }, "json");
     }
+
+    function calculateSubtotal() {
+        var total = 0;
+        $('#cart > div').each(function() {
+            var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1)); // 获取单价
+            var quantity = parseInt($(this).find('input[type="text"]').val()); // 获取数量
+            total += price * quantity;
+        });
+
+        $('#subtotal').text('$' + total.toFixed(2)); // 更新总价
+    }
+
+    $(document).ready(function() {
+        calculateSubtotal(); // 在页面加载时计算总价
+    });
 </script>
 </body>
 </html>
