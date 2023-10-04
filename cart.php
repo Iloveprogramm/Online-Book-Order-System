@@ -162,56 +162,57 @@ echo '</div>';
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-    function removeItem(bookId) {
-        if (confirm("Are you sure you want to remove this item from your cart?")) {
-            $.get("remove_item.php", {book_id: bookId}, function(data) {
-                if (data.status === "success") {
-                    location.reload();
-                } else {
-                    alert("There was an error removing the item from your cart. Please try again.");
-                }
-            }, "json");
-        }
-    }
-
-    function updateQuantity(bookId, change) {
-        var quantityInput = document.getElementById('quantity' + bookId);
-        var newQuantity = parseInt(quantityInput.value) + change;
-
-        if (newQuantity < 1) {
-            alert('Quantity cannot be less than 1');
-            return;
-        }
-
-        quantityInput.value = newQuantity;
-
-        // Send an AJAX request to update the quantity in the database
-        $.post('update_quantity.php', {book_id: bookId, quantity: newQuantity}, function(data) {
+function removeItem(bookId) {
+    if (confirm("Are you sure you want to remove this item from your cart?")) {
+        $.get("remove_item.php", {book_id: bookId}, function(data) {
             if (data.status === "success") {
-                console.log('Quantity updated successfully');
-                calculateSubtotal(); // 计算购物车总价
+                location.reload();
             } else {
-                alert('There was an error updating the quantity. Please try again.');
+                alert("There was an error removing the item from your cart. Please try again.");
             }
         }, "json");
     }
+}
 
-    function calculateSubtotal() {
-        var total = 0;
-        $('#cart > div').each(function() {
-            var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1)); // 获取单价
-            var quantity = parseInt($(this).find('input[type="text"]').val()); // 获取数量
-            total += price * quantity;
-        });
+function updateQuantity(bookId, change) {
+    var quantityInput = document.getElementById('quantity' + bookId);
+    var newQuantity = parseInt(quantityInput.value) + change;
 
-        $('#subtotal').text('$' + total.toFixed(2)); // 更新总价
+    if (newQuantity < 1) {
+        alert('Quantity cannot be less than 1');
+        return;
     }
 
-    $(document).ready(function() {
-        calculateSubtotal(); // 在页面加载时计算总价
+    quantityInput.value = newQuantity;
+
+    // Send an AJAX request to update the quantity in the database
+    $.post('update_quantity.php', {book_id: bookId, quantity: newQuantity}, function(data) {
+        if (data.status === "success") {
+            console.log('Quantity updated successfully');
+            calculateSubtotal(); // 计算购物车总价
+        } else {
+            alert('There was an error updating the quantity. Please try again.');
+        }
+    }, "json");
+}
+
+function calculateSubtotal() {
+    var total = 0;
+    $('#cart > div').each(function() {
+        var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1)); // 获取单价
+        var quantity = parseInt($(this).find('input[type="text"]').val()); // 获取数量
+        total += price * quantity;
     });
+
+    $('#subtotal').text('$' + total.toFixed(2)); // 更新总价
+}
+
+$(document).ready(function() {
+    calculateSubtotal(); // 在页面加载时计算总价
+});
+
+
 </script>
 </body>
 </html>
