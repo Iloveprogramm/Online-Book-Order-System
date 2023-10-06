@@ -1,36 +1,38 @@
 <?php
-header('Content-Type: application/json');
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bookonlineorder";
+function addBookToDatabase($data)
+{
+    $servername = "127.0.0.1";
+    $username = "root";
+    $password = "";
+    $dbname = "bookonlineorder";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(['status' => 'error', 'message' => "Connection failed: " . $conn->connect_error]));
+    if ($conn->connect_error) {
+        return json_encode(['status' => 'error', 'message' => "Connection failed: " . $conn->connect_error]);
+    }
+
+    $stmt = $conn->prepare("INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $bookTitle, $bookAuthor, $bookPrice, $bookImgUrl, $bookCategory);
+
+    $bookTitle = $data['bookTitle'];
+    $bookAuthor = $data['bookAuthor'];
+    $bookPrice = $data['bookPrice'];
+    $bookImgUrl = $data['bookImgUrl'];
+    $bookCategory = $data['bookCategory'];
+
+    if ($stmt->execute()) {
+        $stmt->close();
+        $conn->close();
+        return json_encode(['status' => 'success', 'message' => 'Book added successfully!']);
+    } else {
+        return json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
+    }
 }
 
-// Prepare statement to prevent SQL injection
-$stmt = $conn->prepare("INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssss", $bookTitle, $bookAuthor, $bookPrice, $bookImgUrl, $bookCategory);
-
-// Grab the POST data from the form submission
-$bookTitle = $_POST['bookTitle'];
-$bookAuthor = $_POST['bookAuthor'];
-$bookPrice = $_POST['bookPrice'];
-$bookImgUrl = $_POST['bookImgUrl'];
-$bookCategory = $_POST['bookCategory'];
-
-if ($stmt->execute()) {
-    echo json_encode(['status' => 'success', 'message' => 'Book added successfully!']);
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Error: ' . $stmt->error]);
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {  // 在这里添加 isset() 检查
+    header('Content-Type: application/json');
+    echo addBookToDatabase($_POST);
 }
-
-$stmt->close();
-$conn->close();
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-$servername = "localhost";
+$servername = "127.0.0.1";
 $username = "root";
 $password = "";
 $dbname = "bookonlineorder";
@@ -25,9 +25,13 @@ if(isset($_POST['bookIdToDelete'])) {
     $stmt->bind_param('i', $bookId);  // 'i' indicates that we're binding an integer
     
     if($stmt->execute()) {
-        echo "Book deleted successfully!";
+        if (PHP_SAPI !== 'cli') {
+            echo "Book deleted successfully!";
+        }
     } else {
-        echo "Error deleting book: " . $stmt->error;
+        if (PHP_SAPI !== 'cli') {
+            echo "Error deleting book: " . $stmt->error;
+        }
     }
 
     $stmt->close();
@@ -36,7 +40,9 @@ if(isset($_POST['bookIdToDelete'])) {
 $conn->close();
 
 // Redirect back to deleteBookList.php page
-header("Location: deleteBookList.php");
-exit();
+if (PHP_SAPI !== 'cli' && !defined('PHPUNIT_COMPOSER_INSTALL')) {
+    header("Location: deleteBookList.php");
+    exit();
+}
 
 ?>
