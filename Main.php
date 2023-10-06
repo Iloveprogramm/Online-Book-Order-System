@@ -192,6 +192,11 @@
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>
+                <li class="nav-item">
+        <a class="nav-link" href="cart.php">
+            <i class="fas fa-shopping-cart"></i> Cart
+        </a>
+    </li>
             </ul>
         </div>
     </div>
@@ -274,7 +279,7 @@
             echo '<h5 class="card-title">“' . $row["Title"] . ' (' . $row["Category"] . ')”</h5>';
             echo '<p class="card-text mt-auto mb-2">By: ' . $row["Author"] . '</p>';
             echo '<p class="card-text mb-2">$' . number_format($row["Price"], 2) . '</p>';
-            echo '<a href="Cart.html" class="btn btn-outline-primary mt-auto">Purchase</a>';
+            echo '<button class="btn btn-outline-primary mt-auto" onclick="addToCart(' . $row["BookID"] . ')">Add to Cart</button>';
             echo '<a href="/category/' . strtolower($row["Category"]) . '" class="btn btn-outline-secondary mt-auto">Explore Category</a>';
             echo '<button class="btn btn-outline-primary mt-auto" onclick="addToWishlist(' . $row["BookID"] . ')">Wishlist</button>';
             echo '</div>';
@@ -339,6 +344,22 @@
 
         xhr.send();
     }
+
+    function addToCart(bookId) {
+    var xhr = new XMLHttpRequest();
+    var url = "addToCart.php?book_id=" + bookId;
+    xhr.open("GET", url, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            alert(xhr.responseText);
+        }
+    };
+
+    xhr.send();
+}
+
+
 </script>
 
 

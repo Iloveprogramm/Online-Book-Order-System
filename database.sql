@@ -47,3 +47,10 @@ INSERT INTO Reviews (BookID, ReviewerName, Rating, ReviewText) VALUES
 (4, 'Bob Wilson', 4, 'Enjoyed reading it. The author did a great job.'),
 (5, 'Eva Brown', 5, 'One of the best books I have ever read. Highly recommended.');
 
+CREATE TABLE cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id VARCHAR(255) NOT NULL,
+    book_id INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES Books(BookID)
+);
