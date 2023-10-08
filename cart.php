@@ -48,7 +48,7 @@
         .footer {
             background: var(--primary-color);
             color: var(--secondary-color);
-            margin-top: auto;  
+            margin-top: auto;
         }
 
         #cart {
@@ -78,7 +78,7 @@
     <div class="container">
         <h2>Your Cart</h2>
         <div id="cart" style="background-color:hsl(0, 0%, 95%); padding: 20px;">
-            <?php
+        <?php
             error_reporting(E_ALL);
             ini_set('display_errors', 1);
 
@@ -137,12 +137,19 @@ echo '</div>';
             ?>
         </div>
         <div id="checkout-section" style="margin-top: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
-    <span style="font-weight: bold; font-size: 20px;">Subtotal</span>
-    <span id="subtotal" style="font-size: 20px;">$0.00</span> <!-- 添加了 id="subtotal" -->
-</div>
-            <button style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
+                <span style="font-weight: bold; font-size: 20px;">Subtotal</span>
+                <span id="subtotal" style="font-size: 20px;">$0.00</span>
+            </div>
+
+            <form id="checkout-form" action="checkout.php" method="post">
+                <input type="hidden" id="cart-items" name="cartItems" value="">
+                <input type="hidden" id="total-amount" name="totalAmount" value="">
+                <button type="button" id="checkout-button" style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
+            </form>
+            <a href="order-history.php" class="btn btn-secondary" style="width: 100%; margin-bottom: 20px; display: block; text-align: center;">查看订单历史</a> <!-- 添加的新按钮 -->
             <div style="text-align: center; font-size: 12px; color: grey; margin-bottom: 10px;">Secured by BookQuartet</div>
+
             <div style="display: flex; justify-content: center;">
                 <i class="fab fa-cc-paypal" style="font-size: 24px; margin-right: 10px; color: #0070ba;"></i>
                 <i class="fab fa-cc-visa" style="font-size: 24px; margin-right: 10px; color: #1a1f71;"></i>
@@ -163,6 +170,31 @@ echo '</div>';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+document.getElementById('checkout-button').addEventListener('click', function() {
+            var cartItems = [];
+            var totalAmount = 0; 
+
+            $('#cart > div').each(function() {
+                var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1));
+                var quantity = parseInt($(this).find('input[type="text"]').val());
+                var title = $(this).find('span:nth-child(2)').text();
+                var author = $(this).find('span:nth-child(3)').text();
+
+                cartItems.push({
+                    title: title,
+                    author: author,
+                    price: price,
+                    quantity: quantity
+                });
+
+                totalAmount += price * quantity;
+            });
+
+            document.getElementById('cart-items').value = JSON.stringify(cartItems);
+            document.getElementById('total-amount').value = totalAmount.toFixed(2);
+            document.getElementById('checkout-form').submit();
+        });
+
 function removeItem(bookId) {
     if (confirm("Are you sure you want to remove this item from your cart?")) {
         $.get("remove_item.php", {book_id: bookId}, function(data) {
@@ -211,8 +243,6 @@ function calculateSubtotal() {
 $(document).ready(function() {
     calculateSubtotal(); // 在页面加载时计算总价
 });
-
-
 </script>
 </body>
 </html>

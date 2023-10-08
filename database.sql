@@ -54,3 +54,11 @@ CREATE TABLE cart (
     quantity INT NOT NULL,
     FOREIGN KEY (book_id) REFERENCES Books(BookID)
 );
+
+CREATE TABLE IF NOT EXISTS Orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    orderNumber VARCHAR(255) NOT NULL,
+    items TEXT NOT NULL,  
+    totalAmount DECIMAL(10,2) NOT NULL,  
+    orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
