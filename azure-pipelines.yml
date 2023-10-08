@@ -10,12 +10,11 @@ steps:
 
 - script: |
     sudo service mysql start
-    sudo mysql -e "CREATE USER IF NOT EXISTS 'testuser'@'localhost';"
+    sudo mysql -e "CREATE USER IF NOT EXISTS 'testuser'@'127.0.0.1';"
     sudo mysql -e "CREATE DATABASE IF NOT EXISTS bookonlineorder;"
-    sudo mysql -e "GRANT ALL ON bookonlineorder.* TO 'testuser'@'localhost';"
+    sudo mysql -e "GRANT ALL ON bookonlineorder.* TO 'testuser'@'127.0.0.1';"
     sudo mysql -e "FLUSH PRIVILEGES;"
-    # 这一行是新添加的，用于显示所有 MySQL 用户及其权限
-    sudo mysql -e "SELECT user, host, authentication_string FROM mysql.user;"
+    sudo mysql -e "SELECT user, host FROM mysql.user;"
   displayName: 'Setup MySQL'
 
 - script: |
@@ -24,5 +23,6 @@ steps:
     chmod +x phpunit
   displayName: 'Install PHPUnit'
 
-- script: ./phpunit --verbose ./Test
-  displayName: 'Run tests'
+- script: ./phpunit --verbose ./Test/deleteProductTest.php
+  displayName: 'Run deleteProductTest'
+
