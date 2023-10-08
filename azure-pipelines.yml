@@ -1,43 +1,19 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
 trigger:
 - main
 
 pool:
   vmImage: ubuntu-latest
 
-services:
-  mysql:
-    image: mysql:5.7
-    options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
-    ports:
-      - 3306:3306
-    env:
-      MYSQL_ROOT_PASSWORD: RootPass123!
-      MYSQL_DATABASE: bookonlineorder
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: TestPass123!
-
 steps:
-- script: |
-    sudo apt-get update 
-    sudo apt-get install -y php php-mysqli
-    wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
-    chmod +x phpunit
-  displayName: 'Setup PHPUnit'
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
 
 - script: |
-    until echo exit | nc localhost 3306; do sleep 10; done   # Wait until MySQL is ready
-  displayName: 'Wait for MySQL to be ready'
-
-- script: |
-    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
-    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
-  displayName: 'Grant permissions to testuser'
-
-- script: |
-    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
-  displayName: 'Load database.sql'
-
-- script: |
-    ./phpunit --verbose ./Test/deleteProductTest.php
-    ./phpunit --verbose ./Test/addBookTest.php
-  displayName: 'Run PHPUnit Test'
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
