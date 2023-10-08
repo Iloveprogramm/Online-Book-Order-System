@@ -4,25 +4,35 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+services:
+  mysql:
+    image: mysql:5.7
+    options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+    ports:
+      - 3306:3306
+    env:
+      MYSQL_ROOT_PASSWORD: RootPass123!
+      MYSQL_DATABASE: bookonlineorder
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: TestPass123!
+
 steps:
-- script: sudo apt-get update && sudo apt-get install -y mysql-server
-  displayName: 'Install MySQL'
-
 - script: |
-    sudo service mysql start
-    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RootPass123!';"
-    sudo mysql -e "CREATE USER IF NOT EXISTS 'testuser'@'localhost' IDENTIFIED BY 'TestPass123!';"
-    sudo mysql -e "CREATE DATABASE IF NOT EXISTS bookonlineorder;"
-    sudo mysql -e "GRANT ALL ON bookonlineorder.* TO 'testuser'@'localhost';"
-    sudo mysql -e "FLUSH PRIVILEGES;"
-  displayName: 'Setup MySQL'
-
-- script: |
+    sudo apt-get update 
     sudo apt-get install -y php php-mysqli
     wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
     chmod +x phpunit
-  displayName: 'Install PHPUnit'
+  displayName: 'Setup PHPUnit'
 
-- script: ./phpunit --verbose ./Test/deleteProductTest.php
-  displayName: 'Run deleteProductTest'
+- script: |
+    until echo exit | nc localhost 3306; do sleep 10; done   # Wait until MySQL is ready
+  displayName: 'Wait for MySQL to be ready'
 
+- script: |
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
+  displayName: 'Grant permissions to testuser'
+
+- script: |
+    ./phpunit --verbose ./Test/deleteProductTest.php
+  displayName: 'Run PHPUnit Test'
