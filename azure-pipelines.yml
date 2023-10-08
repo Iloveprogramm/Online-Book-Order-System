@@ -34,5 +34,9 @@ steps:
   displayName: 'Grant permissions to testuser'
 
 - script: |
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
+  displayName: 'Load database.sql'
+
+- script: |
     ./phpunit --verbose ./Test/deleteProductTest.php
   displayName: 'Run PHPUnit Test'
