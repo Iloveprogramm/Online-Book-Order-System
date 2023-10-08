@@ -3,9 +3,9 @@
 function addBookToDatabase($data)
 {
     $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "bookonlineorder";
+$username = "testuser";
+$password = "TestPass123!"; // 使用新的密码
+$dbname = "bookonlineorder";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 

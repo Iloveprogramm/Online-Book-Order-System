@@ -39,4 +39,5 @@ steps:
 
 - script: |
     ./phpunit --verbose ./Test/deleteProductTest.php
+    ./phpunit --verbose ./Test/addBookTest.php
   displayName: 'Run PHPUnit Test'
