@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
@@ -17,12 +12,20 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+  
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y php
+    wget https://phar.phpunit.de/phpunit-9.6.13.phar
+    chmod +x phpunit-9.6.13.phar
+    sudo mv phpunit-9.6.13.phar /usr/local/bin/phpunit
+  displayName: 'Install PHP and PHPUnit'
 
 - script: |
-    /opt/homebrew/bin/php /opt/homebrew/bin/phpunit-9.6.13.phar ./Test/addBookTest.php
-    /opt/homebrew/bin/php /opt/homebrew/bin/phpunit-9.6.13.phar ./Test/AddToCartTest.php
-    /opt/homebrew/bin/php /opt/homebrew/bin/phpunit-9.6.13.phar ./Test/DeleteBookTest.php
-    /opt/homebrew/bin/php /opt/homebrew/bin/phpunit-9.6.13.phar ./Test/deleteProductTest.php
-    /opt/homebrew/bin/php /opt/homebrew/bin/phpunit-9.6.13.phar ./Test/EditBookTest.php
-    /opt/homebrew/bin/php /opt/homebrew/bin/phpunit-9.6.13.phar ./Test/UpdateCartTest.php
+    phpunit ./Test/addBookTest.php
+    phpunit ./Test/AddToCartTest.php
+    phpunit ./Test/DeleteBookTest.php
+    phpunit ./Test/deleteProductTest.php
+    phpunit ./Test/EditBookTest.php
+    phpunit ./Test/UpdateCartTest.php
   displayName: 'Run PHPUnit Tests'
