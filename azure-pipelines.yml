@@ -15,20 +15,38 @@ steps:
   
 - script: |
     sudo apt-get update
-    sudo apt-get install -y php php-mysql mysql-server
+    sudo apt-get install -y php php-mysql mysql-server expect
     wget https://phar.phpunit.de/phpunit-9.6.13.phar
     chmod +x phpunit-9.6.13.phar
     sudo mv phpunit-9.6.13.phar /usr/local/bin/phpunit
-  displayName: 'Install PHP, MySQL and PHPUnit'
+  displayName: 'Install PHP, MySQL, Expect and PHPUnit'
 
 - script: |
     sudo service mysql start
-    sudo mysql -u root -e "USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES;"
-    sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';"
+    SECURE_MYSQL=$(expect -c "
+    set timeout 10
+    spawn mysql_secure_installation
+    expect \"Press y|Y for Yes, any other key for No:\"
+    send \"y\r\"
+    expect \"New password:\"
+    send \"\r\"
+    expect \"Re-enter new password:\"
+    send \"\r\"
+    expect \"Remove anonymous users? (Press y|Y for Yes, any other key for No) :\"
+    send \"y\r\"
+    expect \"Disallow root login remotely? (Press y|Y for Yes, any other key for No) :\"
+    send \"y\r\"
+    expect \"Remove test database and access to it? (Press y|Y for Yes, any other key for No) :\"
+    send \"y\r\"
+    expect \"Reload privilege tables now? (Press y|Y for Yes, any other key for No) :\"
+    send \"y\r\"
+    expect eof
+    ")
+    echo "$SECURE_MYSQL"
     sudo mysql -u root -e "CREATE DATABASE IF NOT EXISTS bookonlineorder;"
     sudo mysql -u root -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'root'@'localhost';"
     sudo mysql -u root -e "FLUSH PRIVILEGES;"
-  displayName: 'Start MySQL and Create Test Database'
+  displayName: 'Start MySQL, Secure Installation and Create Test Database'
 
 - script: |
     phpunit ./Test/addBookTest.php
