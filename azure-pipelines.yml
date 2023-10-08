@@ -5,22 +5,24 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: sudo apt-get update && sudo apt-get install -y mysql-server
+  displayName: 'Install MySQL'
 
 - script: |
-    sudo apt-get update
-    sudo apt-get install -y php php-mysql mysql-server
     sudo service mysql start
-    sudo mysql -e "CREATE USER 'testuser'@'localhost' IDENTIFIED BY '';"
-    sudo mysql -e "CREATE DATABASE bookonlineorder;"
+    sudo mysql -e "CREATE USER IF NOT EXISTS 'testuser'@'localhost';"
+    sudo mysql -e "CREATE DATABASE IF NOT EXISTS bookonlineorder;"
     sudo mysql -e "GRANT ALL ON bookonlineorder.* TO 'testuser'@'localhost';"
     sudo mysql -e "FLUSH PRIVILEGES;"
-    wget https://phar.phpunit.de/phpunit-9.6.13.phar
-    chmod +x phpunit-9.6.13.phar
-    sudo mv phpunit-9.6.13.phar /usr/local/bin/phpunit
-  displayName: 'Setup environment'
+    # 这一行是新添加的，用于显示所有 MySQL 用户及其权限
+    sudo mysql -e "SELECT user, host, authentication_string FROM mysql.user;"
+  displayName: 'Setup MySQL'
 
 - script: |
-    phpunit ./Test/deleteProductTest.php
-  displayName: 'Run PHPUnit Test'
+    sudo apt-get install -y php php-mysqli
+    wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
+    chmod +x phpunit
+  displayName: 'Install PHPUnit'
+
+- script: ./phpunit --verbose ./Test
+  displayName: 'Run tests'
