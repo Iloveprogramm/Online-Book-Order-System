@@ -10,11 +10,11 @@ steps:
 
 - script: |
     sudo service mysql start
-    sudo mysql -e "CREATE USER IF NOT EXISTS 'testuser'@'127.0.0.1';"
+    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'RootPass123!';"
+    sudo mysql -e "CREATE USER IF NOT EXISTS 'testuser'@'localhost' IDENTIFIED BY 'TestPass123!';"
     sudo mysql -e "CREATE DATABASE IF NOT EXISTS bookonlineorder;"
-    sudo mysql -e "GRANT ALL ON bookonlineorder.* TO 'testuser'@'127.0.0.1';"
+    sudo mysql -e "GRANT ALL ON bookonlineorder.* TO 'testuser'@'localhost';"
     sudo mysql -e "FLUSH PRIVILEGES;"
-    sudo mysql -e "SELECT user, host FROM mysql.user;"
   displayName: 'Setup MySQL'
 
 - script: |
