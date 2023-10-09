@@ -1,0 +1,105 @@
+body {
+    font-family: "Comic Sans MS";
+    background-image: radial-gradient(circle at center, red, orange, yellow, green, blue, purple);
+    background-size: 200% 200%;
+    animation: spin 20s infinite linear;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+#payment-details {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.items-container {
+    text-align: left;
+    margin-bottom: 10px; 
+}
+
+.total-container {
+    text-align: right;
+    margin-top: 10px;
+}
+
+h2 {
+    font-size: 30px;
+    color: black;
+    margin-bottom: 30px;
+}
+
+.input-form {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    font-family: "Comic Sans MS";
+    font-size: 16px;
+    background-image: linear-gradient(to left, red, orange, yellow, green, blue, purple);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-size: 200% 100%;
+    transition: background-position 0.2s;
+}
+
+button:hover {
+    background-position: -100% 0;
+}
+
+.cart-item-list {
+    margin: 8px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.cart-item-list img {
+    margin: 8px 15px 8px 8px;
+    flex-shrink: 0; 
+}
+
+.cart-item-list li > div {
+    padding: 8px 15px;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start; 
+}
+
+.cart-item-list span {
+    flex: 1;  
+}
