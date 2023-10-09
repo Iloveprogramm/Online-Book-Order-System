@@ -94,6 +94,9 @@
 
     $cartId = $_COOKIE['cart_id'] ?? null;
 
+    $totalAmount = 0.0;
+    $cartItemsHTML = "";
+
     if ($cartId) {
         $stmt = $conn->prepare("SELECT c.quantity, b.BookID, b.Title, b.Author, b.Price, b.ImageURL 
             FROM cart c
@@ -105,26 +108,32 @@
 
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
+                        $totalAmount += $row["Price"] * $row["quantity"];
+                        // accumulate cart items for the hidden input
+                        $cartItemsHTML .= '<div style="display: flex; align-items: center; margin-bottom: 10px;">';
+                        $cartItemsHTML .= '<img src="' . $row["ImageURL"] . '" alt="' . $row["Title"] . '" style="width: 100px; margin-right: 20px;">';
+                        $cartItemsHTML .= '<span>' . $row["Title"] . '</span>';
+                        $cartItemsHTML .= '</div>';
                         echo '<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background-color: white; display: flex; justify-content: space-between; align-items: center;">';
-echo '<div style="display: flex; align-items: center;">';
-echo '<img src="' . $row["ImageURL"] . '" alt="' . $row["Title"] . '" style="width: 100px; margin-right: 20px;">';
-echo '<span>' . $row["Title"] . ' - ' . $row["Author"] . '</span>';
-echo '</div>';
-echo '<div style="display: flex; align-items: center;">';
-echo '<span>$' . $row["Price"] . ' x </span>';
-echo '<button onclick="updateQuantity(' . $row["BookID"] . ', -1)" style="margin-right: 10px; background-color: transparent; border: none;">';
-echo '<i class="fas fa-minus-circle" style="color: red; font-size: 20px;"></i>';
-echo '</button>';
-echo '<input type="number" id="quantity' . $row["BookID"] . '" value="' . $row["quantity"] . '" style="width: 40px; text-align: center; margin-right: 10px;" min="1" max="100" onchange="validateQuantity(this)" />';
-echo '<button onclick="updateQuantity(' . $row["BookID"] . ', 1)" style="margin-right: 20px; background-color: transparent; border: none;">';
-echo '<i class="fas fa-plus-circle" style="color: green; font-size: 20px;"></i>';
-echo '</button>';
-echo '<button onclick="removeItem(' . $row["BookID"] . ')" style="background-color: transparent; border: none;">';
-echo '<i class="fas fa-trash-alt" style="color: grey; font-size: 20px;"></i>';
-echo '</button>';
-echo '</div>';
-echo '</div>';
-
+                        echo '<div style="display: flex; align-items: center;">';
+                        echo '<img src="' . $row["ImageURL"] . '" alt="' . $row["Title"] . '" style="width: 100px; margin-right: 20px;">';
+                        echo '<span>' . $row["Title"] . ' - ' . $row["Author"] . '</span>';
+                        echo '</div>';
+                        echo '<div style="display: flex; align-items: center;">';
+                        echo '<span>$' . $row["Price"] . ' x </span>';
+                        echo '<button onclick="updateQuantity(' . $row["BookID"] . ', -1)" style="margin-right: 10px; background-color: transparent; border: none;">';
+                        echo '<i class="fas fa-minus-circle" style="color: red; font-size: 20px;"></i>';
+                        echo '</button>';
+                        echo '<input type="hidden" id="cart-items-html" name="cartItemsHTML" value="' . htmlspecialchars($cartItemsHTML, ENT_QUOTES, 'UTF-8') . '">';
+                        echo '<input type="number" id="quantity' . $row["BookID"] . '" value="' . $row["quantity"] . '" style="width: 40px; text-align: center; margin-right: 10px;" min="1" max="100" onchange="validateQuantity(this)" />';
+                        echo '<button onclick="updateQuantity(' . $row["BookID"] . ', 1)" style="margin-right: 20px; background-color: transparent; border: none;">';
+                        echo '<i class="fas fa-plus-circle" style="color: green; font-size: 20px;"></i>';
+                        echo '</button>';
+                        echo '<button onclick="removeItem(' . $row["BookID"] . ')" style="background-color: transparent; border: none;">';
+                        echo '<i class="fas fa-trash-alt" style="color: grey; font-size: 20px;"></i>';
+                        echo '</button>';
+                        echo '</div>';
+                        echo '</div>';
                     }
                 } else {
                     echo "Your cart is empty.";
@@ -139,15 +148,16 @@ echo '</div>';
         <div id="checkout-section" style="margin-top: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
                 <span style="font-weight: bold; font-size: 20px;">Subtotal</span>
-                <span id="subtotal" style="font-size: 20px;">$0.00</span>
+                <span id="subtotal" style="font-size: 20px;">$<?php echo number_format($totalAmount, 2); ?></span>
             </div>
 
-            <form id="checkout-form" action="checkout.php" method="post">
+            <form id="checkout-form" action="payment.php" method="post">
+                <input type="hidden" id="cart-items-html" name="cartItemsHTML" value="<?php echo htmlspecialchars($cartItemsHTML, ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" id="cart-items" name="cartItems" value="">
-                <input type="hidden" id="total-amount" name="totalAmount" value="">
-                <button type="button" id="checkout-button" style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
+                <input type="hidden" id="total-amount" name="totalAmount" value="<?php echo $totalAmount; ?>">
+                <button type="submit" id="checkout-button" style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
             </form>
-            <a href="order-history.php" class="btn btn-secondary" style="width: 100%; margin-bottom: 20px; display: block; text-align: center;">View Order Histroy</a>
+            <a href="order-history.php" class="btn btn-secondary" style="width: 100%; margin-bottom: 20px; display: block; text-align: center;">Order History</a> 
             <div style="text-align: center; font-size: 12px; color: grey; margin-bottom: 10px;">Secured by BookQuartet</div>
 
             <div style="display: flex; justify-content: center;">
@@ -170,6 +180,7 @@ echo '</div>';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
     function validateQuantity(input) {
     let value = parseInt(input.value);
     if (isNaN(value) || value <= 0) {
@@ -183,29 +194,20 @@ echo '</div>';
     }
 }
 document.getElementById('checkout-button').addEventListener('click', function() {
-            var cartItems = [];
-            var totalAmount = 0; 
+    var totalAmount = 0; 
+    $('#cart > div').each(function() {
+        var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1));
+        var quantity = parseInt($(this).find('input[type="number"]').val());
+        totalAmount += price * quantity;
+    });
+    console.log("Total Amount before submitting:", totalAmount.toFixed(2)); 
+    document.getElementById('checkout-button').addEventListener('click', function() {
+    document.getElementById('total-amount').value = "<?php echo $totalAmount; ?>";
+    document.getElementById('checkout-form').submit();
+});
 
-            $('#cart > div').each(function() {
-                var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1));
-                var quantity = parseInt($(this).find('input[type="text"]').val());
-                var title = $(this).find('span:nth-child(2)').text();
-                var author = $(this).find('span:nth-child(3)').text();
+});
 
-                cartItems.push({
-                    title: title,
-                    author: author,
-                    price: price,
-                    quantity: quantity
-                });
-
-                totalAmount += price * quantity;
-            });
-
-            document.getElementById('cart-items').value = JSON.stringify(cartItems);
-            document.getElementById('total-amount').value = totalAmount.toFixed(2);
-            document.getElementById('checkout-form').submit();
-        });
 
 function removeItem(bookId) {
     if (confirm("Are you sure you want to remove this item from your cart?")) {
@@ -242,7 +244,7 @@ function updateQuantity(bookId, change) {
 }
 
 function calculateSubtotal() {
-    var total = 0;
+    var total = 0;  
     $('#cart > div').each(function() {
         var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1)); 
         var quantity = parseInt($(this).find('input[type="number"]').val());
@@ -250,11 +252,9 @@ function calculateSubtotal() {
     });
 
     $('#subtotal').text('$' + total.toFixed(2)); 
+    document.getElementById('total-amount').value = total.toFixed(2); // Set the hidden input's value
 }
 
-$(document).ready(function() {
-    calculateSubtotal(); 
-});
 </script>
 </body>
 </html>
