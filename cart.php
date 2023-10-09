@@ -147,7 +147,7 @@ echo '</div>';
                 <input type="hidden" id="total-amount" name="totalAmount" value="">
                 <button type="button" id="checkout-button" style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
             </form>
-            <a href="order-history.php" class="btn btn-secondary" style="width: 100%; margin-bottom: 20px; display: block; text-align: center;">查看订单历史</a> <!-- 添加的新按钮 -->
+            <a href="order-history.php" class="btn btn-secondary" style="width: 100%; margin-bottom: 20px; display: block; text-align: center;">View Order Histroy</a>
             <div style="text-align: center; font-size: 12px; color: grey; margin-bottom: 10px;">Secured by BookQuartet</div>
 
             <div style="display: flex; justify-content: center;">
