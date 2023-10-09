@@ -79,29 +79,29 @@
         <h2>Your Cart</h2>
         <div id="cart" style="background-color:hsl(0, 0%, 95%); padding: 20px;">
         <?php
-            error_reporting(E_ALL);
-            ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "bookonlineorder";
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "bookonlineorder";
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
-            $cartId = $_COOKIE['cart_id'] ?? null;
+    $cartId = $_COOKIE['cart_id'] ?? null;
 
-            if ($cartId) {
-                $sql = "SELECT c.quantity, b.BookID, b.Title, b.Author, b.Price, b.ImageURL 
-        FROM cart c
-        JOIN Books b ON c.book_id = b.BookID
-        WHERE c.cart_id = '$cartId'";
-
-
-                $result = $conn->query($sql);
+    if ($cartId) {
+        $stmt = $conn->prepare("SELECT c.quantity, b.BookID, b.Title, b.Author, b.Price, b.ImageURL 
+            FROM cart c
+            JOIN Books b ON c.book_id = b.BookID
+            WHERE c.cart_id = ?");
+        $stmt->bind_param("s", $cartId);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
@@ -115,7 +115,7 @@ echo '<span>$' . $row["Price"] . ' x </span>';
 echo '<button onclick="updateQuantity(' . $row["BookID"] . ', -1)" style="margin-right: 10px; background-color: transparent; border: none;">';
 echo '<i class="fas fa-minus-circle" style="color: red; font-size: 20px;"></i>';
 echo '</button>';
-echo '<input type="text" id="quantity' . $row["BookID"] . '" value="' . $row["quantity"] . '" style="width: 40px; text-align: center; margin-right: 10px;" readonly />';
+echo '<input type="number" id="quantity' . $row["BookID"] . '" value="' . $row["quantity"] . '" style="width: 40px; text-align: center; margin-right: 10px;" min="1" max="100" onchange="validateQuantity(this)" />';
 echo '<button onclick="updateQuantity(' . $row["BookID"] . ', 1)" style="margin-right: 20px; background-color: transparent; border: none;">';
 echo '<i class="fas fa-plus-circle" style="color: green; font-size: 20px;"></i>';
 echo '</button>';
@@ -170,6 +170,18 @@ echo '</div>';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function validateQuantity(input) {
+    let value = parseInt(input.value);
+    if (isNaN(value) || value <= 0) {
+        alert('Quantity cannot be less than 1');
+        input.value = 1; 
+    } else if (value > 100) {
+        alert('Quantity cannot be more than 100');
+        input.value = 100; 
+    } else {
+        calculateSubtotal(); 
+    }
+}
 document.getElementById('checkout-button').addEventListener('click', function() {
             var cartItems = [];
             var totalAmount = 0; 
@@ -222,7 +234,7 @@ function updateQuantity(bookId, change) {
     $.post('update_quantity.php', {book_id: bookId, quantity: newQuantity}, function(data) {
         if (data.status === "success") {
             console.log('Quantity updated successfully');
-            calculateSubtotal(); // 计算购物车总价
+            calculateSubtotal(); 
         } else {
             alert('There was an error updating the quantity. Please try again.');
         }
@@ -232,16 +244,16 @@ function updateQuantity(bookId, change) {
 function calculateSubtotal() {
     var total = 0;
     $('#cart > div').each(function() {
-        var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1)); // 获取单价
-        var quantity = parseInt($(this).find('input[type="text"]').val()); // 获取数量
+        var price = parseFloat($(this).find('span:nth-child(1)').text().substring(1)); 
+        var quantity = parseInt($(this).find('input[type="number"]').val());
         total += price * quantity;
     });
 
-    $('#subtotal').text('$' + total.toFixed(2)); // 更新总价
+    $('#subtotal').text('$' + total.toFixed(2)); 
 }
 
 $(document).ready(function() {
-    calculateSubtotal(); // 在页面加载时计算总价
+    calculateSubtotal(); 
 });
 </script>
 </body>

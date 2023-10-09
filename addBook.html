@@ -118,51 +118,97 @@ footer {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    AOS.init({
-        duration: 1000
-    });
+  
+AOS.init({
+    duration: 1000
+});
 
-    document.querySelector('#addBookForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        let formData = new FormData(e.target);
+document.querySelector('#addBookForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        fetch('addBookToDatabase.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire({
-                    title: 'Success!',
-                    text: data.message,
-                    icon: 'success',
-                    confirmButtonText: 'Yes'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "bookManagement.html";
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: 'Error!',
-                    text: data.message,
-                    icon: 'error',
-                    confirmButtonText: 'Yes'
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+    let title = document.querySelector('#title').value;
+    let author = document.querySelector('#author').value;
+    let price = document.querySelector('#price').value;
+    let imgUrl = document.querySelector('#imgUrl').value;
+    let category = document.querySelector('#category').value;
+
+    
+    if (!title.trim()) {
+        Swal.fire('Error!', 'Please enter a book title.', 'error');
+        return;
+    }
+
+
+    if (!author.trim()) {
+        Swal.fire('Error!', 'Please enter the book author.', 'error');
+        return;
+    }
+
+
+    if (!price.trim()) {
+        Swal.fire('Error!', 'Please enter the book price.', 'error');
+        return;
+    } else if (isNaN(price) || parseFloat(price) <= 0) {
+        Swal.fire('Error!', 'Please enter a valid book price.', 'error');
+        return;
+    } else if (parseFloat(price) > 300) {
+        Swal.fire('Error!', 'Book price should not exceed $300.', 'error');
+        return;
+    }
+
+
+    if (!imgUrl.trim()) {
+        Swal.fire('Error!', 'Please enter the cover image URL.', 'error');
+        return;
+    }
+
+
+    if (category === "Choose Category") {
+        Swal.fire('Error!', 'Please select a book category.', 'error');
+        return;
+    }
+
+
+    let formData = new FormData(e.target);
+
+    fetch('addBookToDatabase.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire({
+                title: 'Success!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "bookManagement.html";
+                }
+            });
+        } else {
             Swal.fire({
                 title: 'Error!',
-                text: 'There are some problems, please try again later。',
+                text: data.message,
                 icon: 'error',
                 confirmButtonText: 'Yes'
             });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'There are some problems, please try again later.',
+            icon: 'error',
+            confirmButtonText: 'Yes'
         });
     });
+});
+
+
 </script>
 </body>
 

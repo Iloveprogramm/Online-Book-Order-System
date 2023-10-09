@@ -71,7 +71,7 @@
             border-bottom: none;
         }
 
-        /* 新添加的样式 */
+
         .search-box {
             display: flex;
             gap: 10px;
@@ -169,7 +169,7 @@ if (isset($_GET['orderNumber']) && !empty($_GET['orderNumber'])) {
             
             if ($items) {
                 foreach ($items as $item) {
-                    echo '<div class="order-detail"><i class="fas fa-book"></i> Item: '; // 添加了图标
+                    echo '<div class="order-detail"><i class="fas fa-book"></i> Item: '; 
                     echo $item["title"];
         
                     if (!empty($item["author"])) {

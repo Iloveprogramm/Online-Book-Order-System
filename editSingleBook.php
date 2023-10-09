@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 
-// 定义测试环境常量
+
 if (php_sapi_name() === 'cli') {
     define('IS_TESTING', true);
 } else {
@@ -10,7 +10,7 @@ if (php_sapi_name() === 'cli') {
 }
 
 function getDatabaseConnection() {
-    $servername = "127.0.0.1";  // 修改为127.0.0.1
+    $servername = "127.0.0.1";  
     $username = "root";
     $password = "";
     $dbname = "bookonlineorder";
@@ -71,7 +71,7 @@ if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
     editBook($conn, $_POST);
 }
 
-$row = [];  // 默认值
+$row = [];  
 if (isset($_GET["bookID"])) {
     $row = getBookDetails($conn, $_GET["bookID"]);
 }
