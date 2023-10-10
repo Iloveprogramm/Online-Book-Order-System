@@ -151,6 +151,11 @@
 }
 
     </style>
+
+<script type="text/javascript">
+        <?php session_start(); ?>
+        var currentUserId = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
+    </script>
 </head>
 
 <body>
@@ -369,6 +374,17 @@
         <span>&copy; 2023 BookQuartets. All Rights Reserved.</span>
     </div>
 </footer>
+
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var bookManagementLink = document.querySelector('.nav-link[href="bookManagement.html"]');
+
+        if (!currentUserId.endsWith('@admin.com')) {
+            bookManagementLink.style.display = 'none';
+        }
+    });
+</script>
 
 <!-- Optional: Include Bootstrap 5 and Font Awesome Icons JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
