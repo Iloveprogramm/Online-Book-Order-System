@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-session_start();
-?>
+<?php session_start(); ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Hub</title>
-    <!-- Bootstrap 5 CSS, Icons, and Montserrat Font -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -94,7 +91,7 @@ session_start();
     e.preventDefault();
     
     let formData = new FormData(e.target);
-
+    // Get php function
     fetch('addReviewProcess.php', {
         method: 'POST',
         body: formData
@@ -102,17 +99,17 @@ session_start();
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Show success popup message
+            // Show success message
             alert('Review added successfully!');
         } else {
-            // Show error popup message
+            // Show error message
             alert('Error: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        // Show error popup message
-        alert('There was an error. Please try again later.');
+        // Show error message
+        alert('An error has occurred. Please try again later.');
     });
 });
 </script>
@@ -125,10 +122,8 @@ session_start();
     </div>
 </footer>
 
-<!-- Optional: Include Bootstrap 5 and Font Awesome Icons JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
-
 
 </body>
 

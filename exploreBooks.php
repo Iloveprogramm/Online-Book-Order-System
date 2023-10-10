@@ -43,7 +43,7 @@ session_start();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="reviewMain.html">
+                    <a class="nav-link" href="reviewMain.php">
                         <i class="fas fa-star"></i> Reviews
                     </a>
                 </li>
