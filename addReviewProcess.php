@@ -1,13 +1,10 @@
 <?php
 
+include("dbConnection.php");
+
 function addReviewToDatabase($data)
 {
-    $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "bookonlineorder";
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = getConnection();
 
     if ($conn->connect_error) {
         return json_encode(['status' => 'error', 'message' => "Connection failed: " . $conn->connect_error]);
