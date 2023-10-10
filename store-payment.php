@@ -62,10 +62,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmtPayment->execute()) {
             // Payment details were successfully stored
             echo "Order and payment details stored successfully!";
+            echo "\nYour Order Number is: " . $orderNumber . "";
         } else {
             // Error occurred while storing payment details
             echo "Error in storing payment details: " . $stmtPayment->error;
         }
+        
 
         $stmtPayment->close();
 
