@@ -2,17 +2,7 @@
 
 function addBookToDatabase($data)
 {
-    $servername = "127.0.0.1";
-$username = "testuser";
-$password = "TestPass123!"; 
-$dbname = "bookonlineorder";
-
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    if ($conn->connect_error) {
-        return json_encode(['status' => 'error', 'message' => "Connection failed: " . $conn->connect_error]);
-    }
+    include 'db_config.php';
 
     $stmt = $conn->prepare("INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $bookTitle, $bookAuthor, $bookPrice, $bookImgUrl, $bookCategory);
