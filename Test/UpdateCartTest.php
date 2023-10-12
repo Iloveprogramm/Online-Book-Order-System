@@ -8,7 +8,11 @@ class UpdateCartTest extends TestCase
 
     protected function setUp(): void
     {
-        include 'db_config.php';
+        $servername = "127.0.0.1";
+$username = "testuser";
+$password = "TestPass123!";
+$dbname = "bookonlineorder";
+        $this->conn = new mysqli($servername, $username, $password, $dbname);
     }
 
     protected function tearDown(): void

@@ -1,6 +1,12 @@
 <?php
 
-include 'db_config.php';
+$servername = "127.0.0.1";
+$username = "testuser";
+$password = "TestPass123!"; 
+$dbname = "bookonlineorder";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
