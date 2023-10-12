@@ -8,7 +8,7 @@ class AddReviewTest extends TestCase
     public function testAddReviewToDatabase()
     {
         $reviewData = [
-            'bookID' => 1,
+            'bookID' => 122,
             'reviewerName' => 'Test Reviewer',
             'rating' => '5',
             'reviewText' => 'This book is amazing!'
