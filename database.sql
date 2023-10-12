@@ -18,6 +18,7 @@ INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES
 CREATE TABLE UserTable (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(100) UNIQUE NOT NULL,
+    shipping_address VARCHAR(100) NOT NULL,
     password VARCHAR(100) NOT NULL
 );
 
