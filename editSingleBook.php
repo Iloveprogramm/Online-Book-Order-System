@@ -3,6 +3,7 @@ ob_start();
 session_start();
 
 
+// Check if running in a command line interface (CLI) environment to disable redirection and layout when testing
 if (php_sapi_name() === 'cli') {
     define('IS_TESTING', true);
 } else {
@@ -10,11 +11,7 @@ if (php_sapi_name() === 'cli') {
 }
 
 function getDatabaseConnection() {
-    $servername = "127.0.0.1";
-$username = "testuser";
-$password = "TestPass123!"; 
-$dbname = "bookonlineorder";
-
+    include 'db_config.php';
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -30,6 +27,7 @@ function editBook($conn, $bookData) {
     $price = $bookData["price"];
     $category = $bookData["category"];
         
+    // Prepare the SQL statement to update book details
     $sql = "UPDATE Books SET Title=?, Author=?, Price=?, Category=? WHERE BookID=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssdsi", $title, $author, $price, $category, $bookID);
@@ -51,6 +49,7 @@ function editBook($conn, $bookData) {
     }
 }
 
+//Get details about a specific book
 function getBookDetails($conn, $bookID) {
     $sql = "SELECT BookID, Title, Author, Price, Category FROM Books WHERE BookID=?";
     $stmt = $conn->prepare($sql);

@@ -1,49 +1,42 @@
 <?php
-session_start();
+    function updateUserPassword($user_id, $newPassword) {
+        // Check if user_id is null
+        if ($user_id === null) {
+            return 'Not logged in';
+        }
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bookonlineorder";
+        // Check if the new password is empty
+        if (empty($newPassword)) {
+            return 'Password should not be empty';
+        }
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "bookonlineorder";
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        $conn = new mysqli($servername, $username, $password, $dbname);
 
-if (!isset($_SESSION['username'])) {
-    echo 'Not logged in';
-    exit;
-}
+        if ($conn->connect_error) {
+            return "Connection failed: " . $conn->connect_error;
+        }
 
-if (empty($_POST['newPassword'])) {
-    echo 'Password should not be empty';
-    exit;
-}
+        // HASH-NEWPASSWORD
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-$newPassword = $_POST['newPassword'];
-$user_id = $_SESSION['username'];
+        // UPDATE NEWPASSWORD
+        $query = "UPDATE UserTable SET password = ? WHERE user_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('ss', $hashedPassword, $user_id);
 
-// HASH-NEWPASSWORD
-$hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        if ($stmt->execute()) {
+            session_regenerate_id(true);  // UPDATE SESSIONID
+            return 'success';
+        } else {
+            return 'Error: ' . $stmt->error;
+        }
 
-// UPDATE NEWPASSWORD
-$query = "UPDATE UserTable SET password = ? WHERE user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('ss', $hashedPassword, $user_id);
-
-if ($stmt->execute()) {
-    if ($stmt->affected_rows > 0) {
-        echo 'success';
-        session_regenerate_id(true);  // UPDATE SESSIONID
-    } else {
-        echo 'fail';
+        $stmt->close();
+        $conn->close();
     }
-} else {
-    echo 'Error: ' . $stmt->error;
-}
-
-$stmt->close();
-$conn->close();
 ?>

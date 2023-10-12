@@ -69,6 +69,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
     let author = document.getElementById('author').value.trim();
     let price = parseFloat(document.getElementById('price').value.trim());
     
+    //add data valiadataion(book title)
     if (title.length < 1 || title.length > 100) {
         e.preventDefault();
         Swal.fire({
@@ -78,7 +79,8 @@ document.querySelector('form').addEventListener('submit', function(e) {
         });
         return;
     }
-    
+
+    //add data valiadataion(author name)
     if (author.length < 1 || author.length > 50) {
         e.preventDefault();
         Swal.fire({
@@ -89,6 +91,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
         return;
     }
 
+    //add data valiadataion(price)
     if (isNaN(price) || price <= 0) {
         e.preventDefault();
         Swal.fire({
@@ -98,6 +101,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
         });
         return;
     }
+    //add data valiadataion(book tile cannot all be number)
     if (/^\d+$/.test(title)) {
         e.preventDefault();
         Swal.fire({
