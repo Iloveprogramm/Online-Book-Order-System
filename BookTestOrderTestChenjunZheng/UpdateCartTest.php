@@ -1,5 +1,5 @@
 <?php
-
+//Importing PHPUnit's TestCase class for creating test cases
 use PHPUnit\Framework\TestCase;
 
 class UpdateCartTest extends TestCase
