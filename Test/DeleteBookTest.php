@@ -10,6 +10,7 @@ class DeleteBookTest extends TestCase
     protected function setUp(): void
     {
         include 'db_config.php';
+        $this->conn = $conn; 
         $sql = "INSERT INTO Books (BookID, Title, Author, Category) VALUES (99999, 'TestBook', 'TestAuthor', 'TestCategory')";
         $this->conn->query($sql);
     }
