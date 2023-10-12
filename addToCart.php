@@ -2,17 +2,8 @@
 
 function addToCart($bookId, $existingCartId = null, $setCookie = true) {
 
-    $servername = "127.0.0.1";
-$username = "testuser";
-$password = "TestPass123!"; 
-$dbname = "bookonlineorder";
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
+    include 'db_config.php';
+    
     $cartId = $existingCartId ?? uniqid(); 
 
     if ($setCookie) {
