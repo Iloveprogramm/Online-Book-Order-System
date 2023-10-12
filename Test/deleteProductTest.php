@@ -8,11 +8,8 @@ class deleteProductTest extends TestCase
 
     protected function setUp(): void
     {
-        $servername = "127.0.0.1";
-$username = "testuser";
-$password = "TestPass123!"; 
-$dbname = "bookonlineorder";
-        $this->conn = new mysqli($servername, $username, $password, $dbname);
+        include 'db_config.php';
+        $this->conn = $conn; 
     }
 
     protected function tearDown(): void
