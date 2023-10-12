@@ -9,7 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Custom Styles */
         :root {
             --primary-color: #000;
             --secondary-color: hsl(0, 0%, 95%);
@@ -180,7 +179,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
+//check quantity
     function validateQuantity(input) {
     let value = parseInt(input.value);
     if (isNaN(value) || value <= 0) {
@@ -193,6 +192,7 @@
         calculateSubtotal(); 
     }
 }
+//Check out button listener, once user press checkout, the corrsoponding information will add
 document.getElementById('checkout-button').addEventListener('click', function() {
     var totalAmount = 0; 
     $('#cart > div').each(function() {
@@ -208,7 +208,7 @@ document.getElementById('checkout-button').addEventListener('click', function() 
 
 });
 
-
+//remove js
 function removeItem(bookId) {
     if (confirm("Are you sure you want to remove this item from your cart?")) {
         $.get("remove_item.php", {book_id: bookId}, function(data) {
