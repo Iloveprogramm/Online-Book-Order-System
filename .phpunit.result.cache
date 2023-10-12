@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"AddToCartTest::testAddToCart":0.016,"DeleteBookTest::testDeleteBook":0.01,"EditBookTest::testEditBookOnRealDatabase":0.005,"UpdateCartTest::testUpdateBookQuantityInCart":0.003,"addBookTest::testAddBookToDatabase":0,"deleteProductTest::testDeleteBookFromCart":0.001}}
