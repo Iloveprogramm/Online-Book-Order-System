@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php session_start();?>
+<?php session_start(); ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Online Bookstore</title>
-    <!-- Bootstrap 5 CSS, Icons, and Montserrat Font -->
+    <title>Review Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-
-
 <body>
+
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -41,7 +39,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="reviewMain.php">
+                    <a class="nav-link" href="reviewMain.html">
                         <i class="fas fa-star"></i> Reviews
                     </a>
                 </li>
@@ -58,45 +56,69 @@
 
 <!-- Hero Section -->
 <section class="hero-section">
-    <h1>Explore</h1>
-    <p>Search for your next favourite book</p>
-</section>
-
-<section class="py-5 text-center container">
-            <div class="col-lg-6 col-md-8 mx-auto">
-        <!-- Bootstrap buttons for each category -->
-        <div class="btn-group" role="group" aria-label="Categories">
-            <button type="button" class="btn btn-primary" onclick="loadBooks('programming')">Programming</button>
-            <button type="button" class="btn btn-primary" onclick="loadBooks('history')">History</button>
-            <button type="button" class="btn btn-primary" onclick="loadBooks('novel')">Novel</button>
-        </div>
-
-        <!-- Container to display books -->
-        <div class="mt-3" id="books-container"></div>
-    </div>
+    <h1>Review Hub</h1>
+    <p>Share and read reviews</p>
 </section>
 
 <main>
-    <form method="GET" action="">
-        <section class="py-5 text-center container">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="search" placeholder="Search" aria-label="Search" aria-describedby="search-button">
-                    <button class="btn btn-outline-primary" type="submit" id="search-button">Search</button>
-                </div>
+    <div class="container mt-5">
+        <h1>Add Review</h1>
+        <form id="addReviewForm" method="POST", action="addReviewProcess.php">
+            <div class="mb-3">
+                <label for="bookID" class="form-label">Book ID:</label>
+                <input type="text" class="form-control" id="bookID" name="bookID" required>
             </div>
-        </section>
-    </form>
-
-    <?php include 'exploreBooksProcess.php';
-        searchBooks();
-    ?>
+            <div class="mb-3">
+                <label for="reviewerName" class="form-label">Your Name:</label>
+                <input type="text" class="form-control" id="reviewerName" name="reviewerName" required>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating (1-5):</label>
+                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+            </div>
+            <div class="mb-3">
+                <label for="reviewText" class="form-label">Review:</label>
+                <textarea class="form-control" id="reviewText" name="reviewText" rows="4" required></textarea>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </div>
+        </form>
+    </div>
 </main>
+
+<script>document.querySelector('#addReviewForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    let formData = new FormData(e.target);
+    // Get php function
+    fetch('addReviewProcess.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Show success message
+            alert('Review added successfully!');
+        } else {
+            // Show error message
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Show error message
+        alert('An error has occurred. Please try again later.');
+    });
+});
+</script>
+
 
 <!-- Footer -->
 <footer class="footer py-3">
     <div class="container text-center">
-        <span>&copy; d2023 BookQuartets. All Rights Reserved.</span>
+        <span>&copy; 2023 BookQuartets. All Rights Reserved.</span>
     </div>
 </footer>
 
