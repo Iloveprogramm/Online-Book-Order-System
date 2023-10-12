@@ -48,18 +48,15 @@ steps:
 
 # Running tests
 - script: |
-    ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
-  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
-
-  - script: |
-    ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
-  displayName: 'Pass all Payment Test(PHPUnit Test)'
-- script: |
-    ./phpunit --verbose ./ReviewTest/
-  displayName: 'Pass all Review Test (PHPUnit Test)'
-
-- script: |
-    ./phpunit --verbose ./Test/
-  displayName: 'Pass all Test (PHPUnit Test)'
-
+          ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
+        displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
+      - script: |
+          ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
+        displayName: 'Pass all Payment Test(PHPUnit Test)'
+      - script: |
+          ./phpunit --verbose ./ReviewTest/
+        displayName: 'Pass all Review Test (PHPUnit Test)'
+      - script: |
+          ./phpunit --verbose ./Test/
+        displayName: 'Pass all Test (PHPUnit Test)'
 
