@@ -62,3 +62,12 @@ CREATE TABLE IF NOT EXISTS Orders (
     totalAmount DECIMAL(10,2) NOT NULL,  
     orderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS payment_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    card_number VARCHAR(16) NOT NULL,
+    expiry VARCHAR(5) NOT NULL,  
+    cvc VARCHAR(3) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(id)
+);

@@ -4,30 +4,44 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+services:
+  mysql:
+    image: mysql:5.7
+    options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+    ports:
+      - 3306:3306
+    env:
+      MYSQL_ROOT_PASSWORD: RootPass123!
+      MYSQL_DATABASE: bookonlineorder
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: TestPass123!
+
 steps:
-- script: echo Pipeline successful
-  displayName: 'Run a test'
-#comment
+- script: |
+    sudo apt-get update 
+    sudo apt-get install -y php php-mysqli
+    wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
+    chmod +x phpunit
+  displayName: 'Setup PHPUnit'
 
-# trigger:
-# - main
+- script: |
+    until echo exit | nc localhost 3306; do sleep 10; done   # Wait until MySQL is ready
+  displayName: 'Wait for MySQL to be ready'
 
-# pool:
-#   vmImage: 'ubuntu-latest'
+- script: |
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
+  displayName: 'Grant permissions to testuser'
 
-# steps:
-# - task: UsePythonVersion@0
-#   inputs:
-#     versionSpec: '3.x'
-#     addToPath: true
+- script: |
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
+  displayName: 'Load database.sql'
 
-# - script: |
-#     sudo apt-get update
-#     sudo apt-get install mysql-client -y
-#     sudo apt-get install mysql-server -y
-#     mysql --host=localhost --user=root --password="" -e 'USE bookonlineorder; source database.sql'
-#   displayName: 'Execute SQL script'
-#   env:
-#     database_host: "localhost"
-#     database_user: "root"
-#     database_password: ""
+- script: |
+    ./phpunit --verbose ./Test/deleteProductTest.php
+    ./phpunit --verbose ./Test/addBookTest.php
+    ./phpunit --verbose ./Test/AddToCartTest.php
+    ./phpunit --verbose ./Test/DeleteBookTest.php
+    ./phpunit --verbose ./Test/EditBookTest.php
+    ./phpunit --verbose ./Test/UpdateCartTest.php
+  displayName: 'Pass all Test (PHPUnit Test)'

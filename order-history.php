@@ -71,7 +71,7 @@
             border-bottom: none;
         }
 
-        /* 新添加的样式 */
+
         .search-box {
             display: flex;
             gap: 10px;
@@ -162,25 +162,9 @@ if (isset($_GET['orderNumber']) && !empty($_GET['orderNumber'])) {
             echo '<div class="order-detail"><i class="fas fa-receipt"></i> Order Number: ' . $row["orderNumber"] . '</div>';  // 添加了图标
             echo '<div class="order-detail"><i class="fas fa-calendar-alt"></i> Order Date: ' . $row["orderDate"] . '</div>'; // 添加了图标
         
-            $items = json_decode(trim($row["items"], '"'), true);
-            if (json_last_error() != JSON_ERROR_NONE) {
-                echo 'JSON Error: ' . json_last_error_msg() . '<br>';
-            }
+            echo $row["items"];
             
-            if ($items) {
-                foreach ($items as $item) {
-                    echo '<div class="order-detail"><i class="fas fa-book"></i> Item: '; // 添加了图标
-                    echo $item["title"];
-        
-                    if (!empty($item["author"])) {
-                        echo ' (' . $item["author"] . ')';
-                    }
-        
-                    echo ' - $' . $item["price"] . ' x ' . $item["quantity"] . ' = $' . ($item["price"] * $item["quantity"]) . '</div>';
-                }
-            } else {
-                echo '<div class="order-detail">No items found in this order.</div>';
-            }
+            
         
             echo '<div class="order-detail"><i class="fas fa-dollar-sign"></i> Total Amount: $' . $row["totalAmount"] . '</div>'; // 添加了图标
             echo '</div>';

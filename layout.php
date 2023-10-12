@@ -16,7 +16,7 @@
     <h2>Edit Book Details</h2>
 
     <form action="editSingleBook.php" method="POST">
-        <input type="hidden" name="bookID" value="<?php echo $bookID; ?>">
+    <input type="hidden" name="bookID" value="<?php echo $row['BookID']; ?>">
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title" value="<?php echo $row["Title"]; ?>">
@@ -30,9 +30,17 @@
             <input type="number" step="0.01" class="form-control" id="price" name="price" value="<?php echo $row["Price"]; ?>">
         </div>
         <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
-            <input type="text" class="form-control" id="category" name="category" value="<?php echo $row["Category"]; ?>">
-        </div>
+    <label for="category" class="form-label">Category</label>
+    <select class="form-control" id="category" name="category" required>
+        <option value="" disabled>Select a Category</option>
+        <option value="Novel" <?php echo ($row["Category"] == "Novel" ? "selected" : ""); ?>>Novel</option>
+        <option value="Education" <?php echo ($row["Category"] == "Education" ? "selected" : ""); ?>>Education</option>
+        <option value="Programming" <?php echo ($row["Category"] == "Programming" ? "selected" : ""); ?>>Programming</option>
+        <option value="Cartoon" <?php echo ($row["Category"] == "Cartoon" ? "selected" : ""); ?>>Cartoon</option>
+        <option value="History" <?php echo ($row["Category"] == "History" ? "selected" : ""); ?>>History</option>
+    </select>
+</div>
+
         <button type="submit" class="btn btn-primary">Update Book</button>
     </form>
 </div>
@@ -87,6 +95,25 @@ document.querySelector('form').addEventListener('submit', function(e) {
             icon: 'error',
             title: 'Error',
             text: 'The price must be positive!'
+        });
+        return;
+    }
+    if (/^\d+$/.test(title)) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'The book title cannot be all numbers!'
+        });
+        return;
+    }
+
+    if (/^\d+$/.test(author)) {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'The author name cannot be all numbers!'
         });
         return;
     }
