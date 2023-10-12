@@ -39,4 +39,8 @@ steps:
 
 - script: |
     ./phpunit --verbose ./Test/
-  displayName: 'Pass all Test (PHPUnit Test)'
+  displayName: 'Pass all Wishlist Test (PHPUnit Test)'
+
+- script: |
+    ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
+  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
