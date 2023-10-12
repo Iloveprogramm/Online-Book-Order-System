@@ -50,6 +50,10 @@ steps:
 - script: |
     ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
   displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
+
+  - script: |
+    /opt/homebrew/bin/php phpunit-9.6.13.phar ./UserTestPaymentTest/StorePaymentTest.php
+  displayName: 'Pass the specific Payment Test (PHPUnit Test)'
   
 - script: |
     ./phpunit --verbose ./ReviewTest/
