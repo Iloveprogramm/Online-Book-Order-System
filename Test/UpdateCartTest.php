@@ -7,10 +7,10 @@ class UpdateCartTest extends TestCase
     private $conn;
 
     protected function setUp(): void
-    {
-        include 'db_config.php';
-        $conn = new mysqli($servername, $username, $password, $dbname);
-    }
+{
+    include 'db_config.php';
+    $this->conn = new mysqli($servername, $username, $password, $dbname);
+}
 
     protected function tearDown(): void
     {
