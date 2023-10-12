@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php
-session_start();
-?>
+<?php session_start();?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,13 +88,9 @@ session_start();
         </section>
     </form>
 
-
     <?php include 'exploreBooksProcess.php';
         searchBooks();
     ?>
-
-
-
 </main>
 
 <!-- Footer -->
@@ -105,18 +99,6 @@ session_start();
         <span>&copy; d2023 BookQuartets. All Rights Reserved.</span>
     </div>
 </footer>
-
-<script>
-        // Load the navigation menu using fetch and inject it into the #navigation element
-        fetch('navigation.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navigation').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>

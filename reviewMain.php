@@ -56,19 +56,38 @@
     <div class="mt-5">
       <h3 class="section-heading">Highest Rated Books</h3>
       <hr class="section-divider">
-      <p>Users can explore books based on the highest rating.</p>
+      <div id="highestRatedBooks">
+      </div>
+
+      <script>
+        fetch('getHighReviews.php')
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('highestRatedBooks').innerHTML = data;
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      </script>
+
     </div>
     <div class="mt-5">
       <h3 class="section-heading">Add Review</h3>
       <hr class="section-divider">
       <p>Users can make reviews for books they have read.</p>
-      <a href="addReview.html" class="btn btn-primary btn-lg">Add Review</a>
+      <a href="addReview.php" class="btn btn-primary btn-lg">Add Review</a>
     </div>
     
     <div class="mt-5">
-      <h3 class="section-heading">Recommended Books</h3>
+      <h3 class="section-heading">All Reviews</h3>
       <hr class="section-divider">
-      <p>Users can explore books that are similar to their highest rated books.</p>
+      
+      <?php 
+        include 'allReviewsProcess.php';
+        displayAllReviews(); 
+      ?>
+      
+
     </div>
   </div>
 </main>
