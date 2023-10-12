@@ -38,10 +38,5 @@ steps:
   displayName: 'Load database.sql'
 
 - script: |
-    ./phpunit --verbose ./Test/deleteProductTest.php
-    ./phpunit --verbose ./Test/addBookTest.php
-    ./phpunit --verbose ./Test/AddToCartTest.php
-    ./phpunit --verbose ./Test/DeleteBookTest.php
-    ./phpunit --verbose ./Test/EditBookTest.php
-    ./phpunit --verbose ./Test/UpdateCartTest.php
+    ./phpunit --verbose ./Test/
   displayName: 'Pass all Test (PHPUnit Test)'
