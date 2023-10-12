@@ -1,6 +1,6 @@
 <?php
 
-include("dbConnection.php");
+require_once ("dbConnection.php");
 
 function addReviewToDatabase($data)
 {
