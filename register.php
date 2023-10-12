@@ -1,48 +1,50 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bookonlineorder";
+    function registerUser($user_id, $raw_password) {
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "bookonlineorder";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        
+        if ($conn->connect_error) {
+            return [
+                "status" => "error",
+                "message" => "Connection failed: " . $conn->connect_error
+            ];
+        }
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        // Check if the password is at least 3 characters long
+        if (strlen($raw_password) < 3) {
+            return [
+                "status" => "error",
+                "message" => "Password must be at least 3 characters long."
+            ];
+        }
 
-$user_id = $_POST["username"];
-$raw_password = $_POST["password"];
+        $hashed_password = password_hash($raw_password, PASSWORD_DEFAULT);
 
-// Check if the password is at least 3 characters long
-if (strlen($raw_password) < 3) {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Password must be at least 3 characters long."
-    ]);
-    exit;
-}
+        // Prepare an SQL statement for inserting a new user into the UserTable
+        $stmt = $conn->prepare("INSERT INTO UserTable (user_id, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $user_id, $hashed_password);
 
-$password = password_hash($raw_password, PASSWORD_DEFAULT);
+        if ($stmt->execute() === TRUE) {
+            return [
+                "status" => "success",
+                "message" => "Registration successful."
+            ];
+        } else {
+            return [
+                "status" => "error",
+                "message" => "Error: " . $stmt->error
+            ];
+        }
 
-// Prepare an SQL statement for inserting a new user into the UserTable
-$stmt = $conn->prepare("INSERT INTO UserTable (user_id, password) VALUES (?, ?)");
-// Bind the username and password variables to the SQL statement
-$stmt->bind_param("ss", $user_id, $password);
+        $stmt->close();
+        $conn->close();
+    }
 
-if ($stmt->execute() === TRUE) {
-    echo json_encode([
-        "status" => "success",
-        "message" => "Registration successful."
-    ]);
-    exit;
-} else {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Error: " . $stmt->error
-    ]);
-    exit;
-}
-
-$stmt->close();
-$conn->close();
+    if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "POST") {
+        echo json_encode(registerUser($_POST["username"], $_POST["password"]));
+    }
 ?>
