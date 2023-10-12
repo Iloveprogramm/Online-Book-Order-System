@@ -2,7 +2,7 @@
 
 function addBookToDatabase($data)
 {
-    $servername = "localhost";
+    $servername = "127.0.0.1";
 $username = "root";
 $password = "";
 $dbname = "bookonlineorder";
@@ -32,7 +32,7 @@ $dbname = "bookonlineorder";
     }
 }
 
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {  // 在这里添加 isset() 检查
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {  
     header('Content-Type: application/json');
     echo addBookToDatabase($_POST);
 }
