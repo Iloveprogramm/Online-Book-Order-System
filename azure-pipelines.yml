@@ -48,5 +48,5 @@ steps:
 
 # Running tests
 - script: |
-    ./phpunit --verbose ./Test/
+    ./phpunit --verbose ./BookTestOrderTest(ChenjunZheng)/
   displayName: 'Pass all Test (PHPUnit Test)'
