@@ -1,6 +1,6 @@
 <?php
 
-require_once './deleteReview.php';
+require_once 'deleteReview.php';
 use PHPUnit\Framework\TestCase;
 
 class DeleteReviewTest extends TestCase

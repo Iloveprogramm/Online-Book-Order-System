@@ -1,20 +1,20 @@
 <?php
+require_once 'addReviewProcess.php';
 
-require_once './addReviewProcess.php';
 use PHPUnit\Framework\TestCase;
 
-class ReviewTest extends TestCase
+class AddReviewTest extends TestCase
 {
-    public function testAddReview()
+    public function testAddReviewToDatabase()
     {
-        $postData = [
+        $reviewData = [
             'bookID' => 1,
-            'reviewerName' => 'Jelly Bean',
+            'reviewerName' => 'Test Reviewer',
             'rating' => '5',
-            'reviewText' => 'Great book!'
+            'reviewText' => 'This book is amazing!'
         ];
 
-        $response = addReviewToDatabase($postData);
+        $response = addReviewToDatabase($reviewData);
         $decodedResponse = json_decode($response, true);
 
         $this->assertEquals('success', $decodedResponse['status']);
