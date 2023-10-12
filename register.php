@@ -1,5 +1,5 @@
 <?php
-    function registerUser($user_id, $raw_password) {
+    function registerUser($user_id, $raw_password, $Country, $City, $post_code, $shipping_Address) {
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -23,10 +23,11 @@
         }
 
         $hashed_password = password_hash($raw_password, PASSWORD_DEFAULT);
+        $shipping_Address_Full = $Country . "," . $City . "," . $post_code . "," . $shipping_Address;
 
         // Prepare an SQL statement for inserting a new user into the UserTable
-        $stmt = $conn->prepare("INSERT INTO UserTable (user_id, password) VALUES (?, ?)");
-        $stmt->bind_param("ss", $user_id, $hashed_password);
+        $stmt = $conn->prepare("INSERT INTO UserTable (user_id, password, shipping_address) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $user_id, $hashed_password, $shipping_Address_Full);
 
         if ($stmt->execute() === TRUE) {
             return [
@@ -45,6 +46,6 @@
     }
 
     if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] === "POST") {
-        echo json_encode(registerUser($_POST["username"], $_POST["password"]));
+        echo json_encode(registerUser($_POST["username"], $_POST["password"], $_POST["Country"], $_POST["City"], $_POST["Postcode"], $_POST["shipping-address"]));
     }
 ?>

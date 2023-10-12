@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="userprofile.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        <div class="username-display">
+            <span id="username"></span>
+        </div>
+        <div class="profile-box">
+            <form id="profile-form">
+                <div class="input-form">
+                    <label for="old-password">Enter Password:</label>
+                    <input type="password" id="old-password" name="old-password" placeholder="Enter password">
+                </div>
+                <div class="input-form">
+                    <label for="Country">New Country:</label>
+                    <input type="Text" id="Country" name="Country" placeholder="Enter new Country">
+                </div>
+                <div class="input-form">
+                    <label for="City">New City:</label>
+                    <input type="Text" id="City" name="City" placeholder="Enter new City">
+                </div>
+                <div class="input-form">
+                    <label for="Postcode">New Postcode:</label>
+                    <input type="Text" id="Postcode" name="Postcode" placeholder="Enter new Postcode">
+                </div> 
+                <div class="input-form">
+                    <label for="StreetAddress">New StreetAddress:</label>
+                    <input type="Text" id="StreetAddress" name="StreetAddress"  placeholder="Enter new Valid Street Address">
+                </div>               
+                <div class="button-container">
+                    <button type="submit" class="save-button" id="save-button" disabled onclick="saveChanges()">Save</button>
+                </div>
+            </form>
+            <p><a href="Main.php">Back to Main Page</a></p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.get("get-username.php", function(data) {
+                $("#username").text(data);
+            });
+            
+            // Validate old password when it loses focus
+            $('#old-password').blur(validateOldPassword);
+        });
+
+        function saveChanges() 
+        {
+            var Country = document.getElementById("Country").value;
+            var City = document.getElementById("City").value;
+            var Postcode = document.getElementById("Postcode").value;
+            var StreetAddress = document.getElementById("StreetAddress").value;
+
+            var shippingAddress =  Country + ', ' + City + ', ' + Postcode + ', ' + StreetAddress;
+
+            var xhr = new XMLHttpRequest();
+            var url = "update_shipping.php?shipping_address=" + shippingAddress;
+            xhr.open("GET", url, true);
+
+            xhr.onreadystatechange = function() 
+        {
+            if (xhr.readyState === 4) 
+            {
+                var statusMessage = document.getElementById("statusMessage");
+
+                try 
+                {
+                    var response = JSON.parse(xhr.responseText);
+
+                    if (response.status === "success") 
+                    {
+                        // Success message
+                        statusMessage.innerHTML = response.message;
+                    } 
+                    else 
+                    {
+                        // Error or info message
+                        statusMessage.innerHTML = response.message;
+                    }
+                } 
+                catch (error) 
+                {
+                    // Handle JSON parsing error (unexpected response)
+                    statusMessage.innerHTML = "Error: Unexpected response from the server.";
+                }
+            }
+        };
+
+        xhr.send();
+    }
+        
+
+        function validateOldPassword() 
+        {
+            const oldPassword = $('#old-password').val();
+            const userId = $('#username').text();
+            
+            $.post("validate-password.php", { oldPassword: oldPassword, user_id: userId })
+                .done(function(response) {
+                    if (response === 'success') {
+                        // Password is correct, enable the Save button
+                        $('#save-button').prop('disabled', false);
+                    } else {
+                        alert('Oopsie-daisy! That is not the right old password. Cannot switch it up yet.');
+                        $('#save-button').prop('disabled', true);
+                    }
+                })
+                .fail(function() {
+                    alert('Uh-oh! Cannot reach the server right now.');
+                });
+        }
+    </script>
+</body>
+</html>

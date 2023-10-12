@@ -33,7 +33,7 @@ steps:
 # Wait for MySQL to be ready
 - script: |
     until echo exit | nc localhost 3306; do sleep 10; done
-  displayName: 'Wait for MySQL to be ready'
+  displayName: 'Wait for MySQL DataBase to be ready'
 
 # Grant permissions to testuser
 - script: |
@@ -44,9 +44,9 @@ steps:
 # Load database
 - script: |
     mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
-  displayName: 'Load database.sql'
+  displayName: 'Run database.sql'
 
 # Running tests
 - script: |
     ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
-  displayName: 'Pass all Test (PHPUnit Test)'
+  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'

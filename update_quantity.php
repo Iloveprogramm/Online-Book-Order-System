@@ -12,6 +12,7 @@ $cartId = $_COOKIE['cart_id'] ?? null;
 $response = array("status" => "failure");
 
 if ($bookId && $quantity && $cartId) {
+     // Preparing and executing the SQL statement to update the cart
     $stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE book_id = ? AND cart_id = ?");
     $stmt->bind_param("iis", $quantity, $bookId, $cartId);
     if ($stmt->execute()) {
