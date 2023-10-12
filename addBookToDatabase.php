@@ -3,8 +3,8 @@
 function addBookToDatabase($data)
 {
     $servername = "127.0.0.1";
-$username = "root";
-$password = "";
+$username = "testuser";
+$password = "TestPass123!"; // 使用新的密码
 $dbname = "bookonlineorder";
 
 
