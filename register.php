@@ -12,6 +12,10 @@ if ($conn->connect_error) {
 
 $user_id = $_POST["username"];
 $raw_password = $_POST["password"];
+$Country = $_POST["Country"];
+$City = $_POST["City"];
+$post_code = $_POST["Postcode"];
+$shipping_Address = $_POST["shipping-address"];
 
 // Check if the password is at least 3 characters long
 if (strlen($raw_password) < 3) {
@@ -23,11 +27,12 @@ if (strlen($raw_password) < 3) {
 }
 
 $password = password_hash($raw_password, PASSWORD_DEFAULT);
+$shipping_Address_Full = $Country . "," . $City . "," . $post_code . "," . $shipping_Address;
 
 // Prepare an SQL statement for inserting a new user into the UserTable
-$stmt = $conn->prepare("INSERT INTO UserTable (user_id, password) VALUES (?, ?)");
+$stmt = $conn->prepare("INSERT INTO UserTable (user_id, password, shipping_address) VALUES (?, ?, ?)");
 // Bind the username and password variables to the SQL statement
-$stmt->bind_param("ss", $user_id, $password);
+$stmt->bind_param("sss", $user_id, $password, $shipping_Address_Full);
 
 if ($stmt->execute() === TRUE) {
     echo json_encode([

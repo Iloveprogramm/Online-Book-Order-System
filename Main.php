@@ -177,6 +177,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="EditShipping.html">
+                        <i class="fa fa-truck"></i> Shipping Details
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="Wishlist.php">
                         <i class="fas fa-star"></i> Wishlist
                     </a>
@@ -317,35 +322,44 @@
         modal.style.display = "none";
     };
 
-    function addToWishlist(bookId) {
+    function addToWishlist(bookId) 
+    {
         var xhr = new XMLHttpRequest();
         var url = "add-To-Wishlist.php?book_id=" + bookId;
         xhr.open("GET", url, true);
 
-        xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-        var modal = document.getElementById("myModal");
-        var statusMessage = document.getElementById("statusMessage");
+        xhr.onreadystatechange = function() 
+        {
+        if (xhr.readyState === 4) 
+        {
+            var modal = document.getElementById("myModal");
+            var statusMessage = document.getElementById("statusMessage");
 
-        try {
-            var response = JSON.parse(xhr.responseText);
+            try 
+            {
+                var response = JSON.parse(xhr.responseText);
 
-            if (response.status === "success") {
-                // Success message
-                statusMessage.innerHTML = response.message;
-            } else {
-                // Error or info message
-                statusMessage.innerHTML = response.message;
+                if (response.status === "success") 
+                {
+                    // Success message
+                    statusMessage.innerHTML = response.message;
+                } 
+                else 
+                {
+                    // Error or info message
+                    statusMessage.innerHTML = response.message;
+                }
+            } 
+            catch (error) 
+            {
+                // Handle JSON parsing error (unexpected response)
+                statusMessage.innerHTML = "Error: Unexpected response from the server.";
             }
-        } catch (error) {
-            // Handle JSON parsing error (unexpected response)
-            statusMessage.innerHTML = "Error: Unexpected response from the server.";
-        }
 
-        // Display the modal
-        modal.style.display = "block";
-    }
-};
+            // Display the modal
+            modal.style.display = "block";
+        }
+    };
 
         xhr.send();
     }
