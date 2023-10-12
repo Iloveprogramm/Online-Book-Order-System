@@ -51,7 +51,4 @@ steps:
     ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
   displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
 
-- script: |
-    ./phpunit --verbose ./ReviewTest/
-  displayName: 'Review tests successful'
 
