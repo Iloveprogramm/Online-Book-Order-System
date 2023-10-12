@@ -2,12 +2,22 @@
 
 use PHPUnit\Framework\TestCase;
 
-include 'db_config.php'; 
 class DeleteBookTest extends TestCase
 {
     private $conn;
+
+   
     protected function setUp(): void
     {
+        $servername = "127.0.0.1";
+$username = "testuser";
+$password = "TestPass123!"; 
+$dbname = "bookonlineorder";
+
+
+        $this->conn = new mysqli($servername, $username, $password, $dbname);
+
+     
         $sql = "INSERT INTO Books (BookID, Title, Author, Category) VALUES (99999, 'TestBook', 'TestAuthor', 'TestCategory')";
         $this->conn->query($sql);
     }
