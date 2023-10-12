@@ -11,6 +11,12 @@ if (php_sapi_name() === 'cli') {
 
 function getDatabaseConnection() {
     include 'db_config.php';
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    
+    return $conn;
 }
 
 function editBook($conn, $bookData) {
