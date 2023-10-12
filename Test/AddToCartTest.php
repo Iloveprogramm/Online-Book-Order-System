@@ -1,7 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-require_once 'AddToCart.php';  
+require_once 'addToCart.php';  
 
 class AddToCartTest extends TestCase
 {

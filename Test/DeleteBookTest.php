@@ -10,9 +10,9 @@ class DeleteBookTest extends TestCase
     protected function setUp(): void
     {
         $servername = "127.0.0.1";
-        $username = "root";
-        $password = "";
-        $dbname = "bookonlineorder";
+$username = "testuser";
+$password = "TestPass123!"; 
+$dbname = "bookonlineorder";
 
 
         $this->conn = new mysqli($servername, $username, $password, $dbname);

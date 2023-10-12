@@ -4,7 +4,7 @@ function addBookToDatabase($data)
 {
     $servername = "127.0.0.1";
 $username = "testuser";
-$password = "TestPass123!"; // 使用新的密码
+$password = "TestPass123!"; 
 $dbname = "bookonlineorder";
 
 
