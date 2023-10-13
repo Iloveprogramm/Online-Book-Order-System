@@ -1,5 +1,5 @@
 <?php
-include("dbConnection.php");
+require_once("dbConnection.php");
 
 function searchBooks() {
     if (isset($_GET['search'])) {
