@@ -79,6 +79,6 @@ CREATE TABLE shipment (
     city VARCHAR(255),
     postcode VARCHAR(255),
     street_address VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES usertable(user_id)
+    FOREIGN KEY (user_id) REFERENCES Usertable(user_id)
 );
 
