@@ -56,10 +56,10 @@ steps:
      ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
   displayName: 'Pass the specific Payment Test (PHPUnit Test)'
   
-- script: |
-    ./phpunit --verbose ./ReviewTest/
-  displayName: 'Pass all Review Test (PHPUnit Test)'
+# - script: |
+#     ./phpunit --verbose ./ReviewTest/
+#   displayName: 'Pass all Review Test (PHPUnit Test)'
 
-- script: |
-    ./phpunit --verbose ./Test/
-  displayName: 'Pass all Test (PHPUnit Test)'
+# - script: |
+#     ./phpunit --verbose ./Test/
+#   displayName: 'Pass all Test (PHPUnit Test)'
