@@ -29,7 +29,7 @@
 </script>
 
 <?php
-require_once ("dbConnection.php");
+include("dbConnection.php");
 
 function displayAllReviews() {
     $conn = getConnection();

@@ -1,5 +1,5 @@
 <?php
-require_once("dbConnection.php");
+include("dbConnection.php");
 
 // function searchHighestRatedBooks() {
     $conn = getConnection();

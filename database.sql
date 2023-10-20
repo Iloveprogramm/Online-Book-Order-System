@@ -18,7 +18,6 @@ INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES
 CREATE TABLE UserTable (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(100) UNIQUE NOT NULL,
-    shipping_address VARCHAR(100),
     password VARCHAR(100) NOT NULL
 );
 
@@ -71,4 +70,14 @@ CREATE TABLE IF NOT EXISTS payment_details (
     expiry VARCHAR(5) NOT NULL,  
     cvc VARCHAR(3) NOT NULL,
     FOREIGN KEY (order_id) REFERENCES Orders(id)
+);
+
+CREATE TABLE shipment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED,
+    country VARCHAR(255),
+    city VARCHAR(255),
+    postcode VARCHAR(255),
+    street_address VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES usertable(user_id)
 );

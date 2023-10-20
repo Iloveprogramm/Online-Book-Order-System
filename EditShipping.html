@@ -54,20 +54,22 @@
             $('#old-password').blur(validateOldPassword);
         });
 
+        
+
         function saveChanges() 
-        {
-            var Country = document.getElementById("Country").value;
-            var City = document.getElementById("City").value;
-            var Postcode = document.getElementById("Postcode").value;
-            var StreetAddress = document.getElementById("StreetAddress").value;
+    {
+        var Country = document.getElementById("Country").value;
+        var City = document.getElementById("City").value;
+        var Postcode = document.getElementById("Postcode").value;
+        var StreetAddress = document.getElementById("StreetAddress").value;
 
-            var shippingAddress =  Country + ', ' + City + ', ' + Postcode + ', ' + StreetAddress;
+        var shippingAddress =  Country + ', ' + City + ', ' + Postcode + ', ' + StreetAddress;
 
-            var xhr = new XMLHttpRequest();
-            var url = "update_shipping.php?shipping_address=" + shippingAddress;
-            xhr.open("GET", url, true);
+        var xhr = new XMLHttpRequest();
+        var url = "update_shipping.php?shipping_address=" + encodeURIComponent(shippingAddress);
+        xhr.open("GET", url, true);
 
-            xhr.onreadystatechange = function() 
+        xhr.onreadystatechange = function() 
         {
             if (xhr.readyState === 4) 
             {
@@ -79,26 +81,22 @@
 
                     if (response.status === "success") 
                     {
-                        // Success message
                         statusMessage.innerHTML = response.message;
                     } 
                     else 
                     {
-                        // Error or info message
                         statusMessage.innerHTML = response.message;
                     }
                 } 
                 catch (error) 
                 {
-                    // Handle JSON parsing error (unexpected response)
                     statusMessage.innerHTML = "Error: Unexpected response from the server.";
                 }
             }
         };
 
         xhr.send();
-    }
-        
+    }  
 
         function validateOldPassword() 
         {
