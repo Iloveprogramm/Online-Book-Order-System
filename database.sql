@@ -74,11 +74,11 @@ CREATE TABLE IF NOT EXISTS payment_details (
 
 CREATE TABLE shipment (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id VARCHAR(100),
+    user_id VARCHAR(100) UNIQUE NOT NULL,
     country VARCHAR(255),
     city VARCHAR(255),
     postcode VARCHAR(255),
     street_address VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES Usertable(user_id)
+    FOREIGN KEY (user_id) REFERENCES usertable(user_id)
 );
 
