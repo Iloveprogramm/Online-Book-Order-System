@@ -29,6 +29,7 @@ steps:
     wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
     chmod +x phpunit
   displayName: 'Setup PHPUnit'
+//TEST
 
 # Wait for MySQL to be ready
 - script: |
