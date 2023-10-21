@@ -65,6 +65,7 @@
                 .done(function(response) {
                     if (response === 'success') {
                         alert('Hooray! Your password is reborn!');
+                        window.location.href = "./Main.php";
                     } else {
                         alert('Oops! An error occurred.');
                     }

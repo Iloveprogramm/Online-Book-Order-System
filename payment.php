@@ -72,6 +72,24 @@
     </div>
 </div>
 
+
+<!-- Custom modal -->
+<div id="successModal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Success</h5>
+      </div>
+      <div class="modal-body">
+        <p id="orderSuccessMessage">Order and payment details stored successfully!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="continueButton">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -109,20 +127,36 @@
     });
 
     $("#paymentForm").submit(function(e) {
-        e.preventDefault();
-        
-        $.ajax({
-            url: 'store-payment.php', 
-            type: 'post',
-            data: $(this).serialize(),
-            success: function(response) {
-                alert(response);
-            },
-            error: function() {
-                alert('An error occurred. Please try again.');
+    e.preventDefault();
+    
+    $.ajax({
+        url: 'store-payment.php', 
+        type: 'post',
+        data: $(this).serialize(),
+        dataType: 'json',
+        success: function(response) {
+            if(response.status === 'success') {
+                $('#orderSuccessMessage').text('Order and payment details stored successfully!\nYour Order Number is: ' + response.orderNumber);
+                
+                var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+                successModal.show();
+            } else {
+                alert(response.message); 
             }
-        });
+        },
+        error: function() {
+            alert('An error occurred. Please try again.');
+        }
     });
+});
+
+$('#continueButton').click(function() {
+    window.location.href = 'Main.php';
+});
+
 </script>
 
 </body>

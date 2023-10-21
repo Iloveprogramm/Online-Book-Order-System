@@ -18,8 +18,9 @@ if (isset($_SESSION['username'])) {
     exit();
 }
 
-if (isset($_GET["shipping_address"])) {
-    $shipping_Address = explode(", ", urldecode($_GET["shipping_address"]));
+
+if (isset($_POST["shipping_address"])) {
+    $shipping_Address = explode(", ", urldecode($_POST["shipping_address"]));
     $country = $shipping_Address[0];
     $city = $shipping_Address[1];
     $postcode = $shipping_Address[2];

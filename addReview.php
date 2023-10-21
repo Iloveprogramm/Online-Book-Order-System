@@ -87,7 +87,8 @@
     </div>
 </main>
 
-<script>document.querySelector('#addReviewForm').addEventListener('submit', function(e) {
+<script>
+document.querySelector('#addReviewForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     let formData = new FormData(e.target);
@@ -101,6 +102,8 @@
         if (data.status === 'success') {
             // Show success message
             alert('Review added successfully!');
+            // Redirect to reviewMain.php
+            window.location.href = 'reviewMain.php';
         } else {
             // Show error message
             alert('Error: ' + data.message);
@@ -113,6 +116,7 @@
     });
 });
 </script>
+
 
 
 <!-- Footer -->

@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title>Edit Shipment</title>
     <link rel="stylesheet" href="userprofile.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
+
 <body>
 
     <div class="profile-container">
-        <h1>User Profile</h1>
+        <h1>Edit Shipment</h1>
         <div class="username-display">
             <span id="username"></span>
         </div>
@@ -22,101 +24,115 @@
                 </div>
                 <div class="input-form">
                     <label for="Country">New Country:</label>
-                    <input type="Text" id="Country" name="Country" placeholder="Enter new Country">
+                    <input type="text" id="Country" name="Country" placeholder="Enter new Country">
                 </div>
                 <div class="input-form">
                     <label for="City">New City:</label>
-                    <input type="Text" id="City" name="City" placeholder="Enter new City">
+                    <input type="text" id="City" name="City" placeholder="Enter new City">
                 </div>
                 <div class="input-form">
                     <label for="Postcode">New Postcode:</label>
-                    <input type="Text" id="Postcode" name="Postcode" placeholder="Enter new Postcode">
-                </div> 
+                    <input type="text" id="Postcode" name="Postcode" placeholder="Enter new Postcode">
+                </div>
                 <div class="input-form">
-                    <label for="StreetAddress">New StreetAddress:</label>
-                    <input type="Text" id="StreetAddress" name="StreetAddress"  placeholder="Enter new Valid Street Address">
-                </div>               
+                    <label for="StreetAddress">New Street Address:</label>
+                    <input type="text" id="StreetAddress" name="StreetAddress" placeholder="Enter new Street Address">
+                </div>
                 <div class="button-container">
-                    <button type="submit" class="save-button" id="save-button" disabled onclick="saveChanges()">Save</button>
+                    <button type="submit" class="save-button" id="save-button" disabled>Save</button>
                 </div>
             </form>
+            <div id="statusMessage"></div>
             <p><a href="Main.php">Back to Main Page</a></p>
         </div>
     </div>
 
     <script>
-        $(document).ready(function() {
-            $.get("get-username.php", function(data) {
+        $(document).ready(function () {
+            $.get("get-username.php", function (data) {
                 $("#username").text(data);
             });
-            
-            // Validate old password when it loses focus
+
             $('#old-password').blur(validateOldPassword);
+
+            $('#profile-form').submit(function (event) {
+                event.preventDefault();
+                saveChanges();
+            });
         });
 
-        
+        function saveChanges() {
+            var Country = $('#Country').val();
+            var City = $('#City').val();
+            var Postcode = $('#Postcode').val();
+            var StreetAddress = $('#StreetAddress').val();
 
-        function saveChanges() 
-    {
-        var Country = document.getElementById("Country").value;
-        var City = document.getElementById("City").value;
-        var Postcode = document.getElementById("Postcode").value;
-        var StreetAddress = document.getElementById("StreetAddress").value;
-
-        var shippingAddress =  Country + ', ' + City + ', ' + Postcode + ', ' + StreetAddress;
-
-        var xhr = new XMLHttpRequest();
-        var url = "update_shipping.php?shipping_address=" + encodeURIComponent(shippingAddress);
-        xhr.open("GET", url, true);
-
-        xhr.onreadystatechange = function() 
-        {
-            if (xhr.readyState === 4) 
-            {
-                var statusMessage = document.getElementById("statusMessage");
-
-                try 
-                {
-                    var response = JSON.parse(xhr.responseText);
-
-                    if (response.status === "success") 
-                    {
-                        statusMessage.innerHTML = response.message;
-                    } 
-                    else 
-                    {
-                        statusMessage.innerHTML = response.message;
-                    }
-                } 
-                catch (error) 
-                {
-                    statusMessage.innerHTML = "Error: Unexpected response from the server.";
-                }
+            if (!Country || !City || !Postcode || !StreetAddress) {
+                alert('All fields are required!');
+                return;
             }
-        };
 
-        xhr.send();
-    }  
+            var shippingAddress = Country + ', ' + City + ', ' + Postcode + ', ' + StreetAddress;
 
-        function validateOldPassword() 
-        {
+            $.ajax({
+                type: "POST",
+                url: "update_shipping.php",
+                data: { shipping_address: shippingAddress },
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+                        swal({
+                            title: "Success!",
+                            text: response.message,
+                            icon: "success",
+                        })
+                        .then((value) => {
+                            window.location.href = "Main.php";
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: response.message,
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function () {
+                    swal({
+                        title: "Error!",
+                        text: "Could not contact the server.",
+                        icon: "error",
+                    });
+                }
+            });
+        }
+
+        function validateOldPassword() {
             const oldPassword = $('#old-password').val();
             const userId = $('#username').text();
-            
+
             $.post("validate-password.php", { oldPassword: oldPassword, user_id: userId })
-                .done(function(response) {
+                .done(function (response) {
                     if (response === 'success') {
-                        // Password is correct, enable the Save button
                         $('#save-button').prop('disabled', false);
                     } else {
-                        alert('Oopsie-daisy! That is not the right old password. Cannot switch it up yet.');
+                        swal({
+                            title: "Oops!",
+                            text: "The old password is incorrect. Please try again.",
+                            icon: "warning",
+                        });
                         $('#save-button').prop('disabled', true);
                     }
                 })
-                .fail(function() {
-                    alert('Uh-oh! Cannot reach the server right now.');
+                .fail(function () {
+                    swal({
+                        title: "Error!",
+                        text: "Could not reach the server right now.",
+                        icon: "error",
+                    });
                 });
         }
     </script>
 </body>
+
 </html>
