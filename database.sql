@@ -83,3 +83,10 @@ CREATE TABLE shipment (
 ) ENGINE=InnoDB;
 
 
+CREATE TABLE book_edit_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT NOT NULL,
+    old_value TEXT NOT NULL,
+    new_value TEXT NOT NULL,
+    edited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
