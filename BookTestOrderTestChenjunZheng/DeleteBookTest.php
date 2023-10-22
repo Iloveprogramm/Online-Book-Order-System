@@ -6,23 +6,37 @@ class DeleteBookTest extends TestCase
 {
     private $conn;
 
-   
     protected function setUp(): void
     {
+        // Handling the session if needed
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         include 'db_config.php';
         $this->conn = $conn; 
-        //Insert test books into the database
-        $sql = "INSERT INTO Books (BookID, Title, Author, Category) VALUES (99999, 'TestBook', 'TestAuthor', 'TestCategory')";
-        $this->conn->query($sql);
+
+        // Using prepared statement to insert test books into the database
+        $stmt = $this->conn->prepare("INSERT INTO Books (BookID, Title, Author, Category) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("isss", $bookID, $title, $author, $category);
+
+        $bookID = 99999;
+        $title = 'TestBook';
+        $author = 'TestAuthor';
+        $category = 'TestCategory';
+        $stmt->execute();
+        $stmt->close();
     }
 
- 
-    // The tearDown method will be run after each test method is executed
     protected function tearDown(): void
     {
+        // Using prepared statement to delete the test book from the database
+        $stmt = $this->conn->prepare("DELETE FROM Books WHERE BookID = ?");
+        $stmt->bind_param("i", $bookID);
 
-        $sql = "DELETE FROM Books WHERE BookID = 99999";
-        $this->conn->query($sql);
+        $bookID = 99999;
+        $stmt->execute();
+        $stmt->close();
 
         $this->conn->close();
     }
@@ -31,13 +45,18 @@ class DeleteBookTest extends TestCase
     {
         $_POST['bookIdToDelete'] = 99999;
 
-  
         require './deleteProcess.php';
 
         // Run a database query to see if the book has been removed.
-        $result = $this->conn->query("SELECT * FROM Books WHERE BookID = 99999");
+        $stmt = $this->conn->prepare("SELECT * FROM Books WHERE BookID = ?");
+        $stmt->bind_param("i", $bookID);
 
-        // Declare that the query result should have zero rows, indicating that the book has been delete.
-        $this->assertEquals(0, $result->num_rows);
+        $bookID = 99999;
+        $stmt->execute();
+        $stmt->store_result();
+
+        // Declare that the query result should have zero rows, indicating that the book has been deleted.
+        $this->assertEquals(0, $stmt->num_rows);
+        $stmt->close();
     }
 }
