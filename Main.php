@@ -1,3 +1,7 @@
+<?php 
+session_start();
+$currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -150,14 +154,94 @@
   cursor: pointer;
 }
 
+.close {
+    cursor: pointer;
+}
+
+.close i {
+    font-size: 24px;
+    color: red;  /* 或其他你喜欢的颜色 */
+}
+
+.modal-content {
+    border-radius: 10px;  /* 增加圆角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* 增加阴影 */
+}
     </style>
 
 <script type="text/javascript">
-        <?php session_start(); ?>
-        var currentUserId = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
-    </script>
-</head>
+        var books = [
+            {
+                id: 100020,
+                title: "Thinking in Java",
+                author: "Bruce Eckel",
+                price: 99.00,
+                category: "Programming",
+                description: "A classic book for learning Java programming with various examples and exercises."
+            },
+            {
+                id: 100021,
+                title: "The Marxification of Education",
+                author: "James Lindsay",
+                price: 28.48,
+                category: "Education",
+                description: "An exploration of the influence of Marxism in shaping current educational policies."
+            },
+            {
+                id: 100022,
+                title: "Reminders of Him",
+                author: "Colleen Hoover",
+                price: 16.00,
+                category: "Novel",
+                description: "A heartfelt novel about love, loss, and redemption."
+            },
+            {
+                id: 100023,
+                title: "The Complete Far Side",
+                author: "Gary Larson",
+                price: 200.00,
+                category: "Cartoon",
+                description: "A collection of iconic comics from The Far Side."
+            },
+            {
+                id: 100024,
+                title: "History of the World Map by Map",
+                author: "DK",
+                price: 70.61,
+                category: "History",
+                description: "A visual representation of global history, told through maps."
+            }
+        ];
 
+        function viewBookDetails(bookId) {
+            var book = books.find(b => b.id === bookId);
+            if (book) {
+                var details = "<h2>" + book.title + "</h2>";
+                details += "<p>Author: " + book.author + "</p>";
+                details += "<p>Price: $" + book.price.toFixed(2) + "</p>";
+                details += "<p>Category: " + book.category + "</p>";
+                details += "<p>Description: " + book.description + "</p>";
+                document.getElementById("bookDetails").innerHTML = details;
+                document.getElementById("bookDetailsModal").style.display = "block";
+            }
+        }
+
+        function closeBookDetails() {
+            document.getElementById("bookDetailsModal").style.display = "none";
+        }
+    </script>
+
+<script type="text/javascript">
+        var currentUserId = "<?php echo $currentUserId; ?>";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var bookManagementLink = document.querySelector('.nav-link[href="bookManagement.html"]');
+
+            if (!currentUserId.endsWith('@admin.com')) {
+                bookManagementLink.style.display = 'none';
+            }
+        });
+    </script>
 <body>
 
 <!-- Navigation -->
@@ -279,7 +363,7 @@
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            echo '<div class="col-md-4">';
+            echo '<div class="col-md-4" onclick="viewBookDetails(' . $row["BookID"] . ')">'; 
             echo '<div class="card h-100">';
             echo '<div class="book-image-wrapper">';
             echo '<img src="' . $row["ImageURL"] . '" class="card-img" alt="Book Cover">';
@@ -289,8 +373,7 @@
             echo '<h5 class="card-title">“' . $row["Title"] . ' (' . $row["Category"] . ')”</h5>';
             echo '<p class="card-text mt-auto mb-2">By: ' . $row["Author"] . '</p>';
             echo '<p class="card-text mb-2">$' . number_format($row["Price"], 2) . '</p>';
-            echo '<button class="btn btn-outline-primary mt-auto" onclick="addToCart(' . $row["BookID"] . ')">Add to Cart</button>';
-            echo '<a href="/category/' . strtolower($row["Category"]) . '" class="btn btn-outline-secondary mt-auto">Explore Category</a>';
+            echo '<button class="btn btn-outline-primary mt-auto" onclick="addToCart(event, ' . $row["BookID"] . ')">Add to Cart</button>';
             echo '<button class="btn btn-outline-primary mt-auto" onclick="addToWishlist(' . $row["BookID"] . ')">Wishlist</button>';
             echo '</div>';
             echo '</div>';
@@ -355,7 +438,9 @@
         xhr.send();
     }
 
-    function addToCart(bookId) {
+    function addToCart(event, bookId) {
+    event.stopPropagation();  // 阻止事件冒泡
+
     var xhr = new XMLHttpRequest();
     var url = "addToCart.php?book_id=" + bookId;
     xhr.open("GET", url, true);
@@ -370,7 +455,18 @@
 }
 
 
+
 </script>
+
+<div id="bookDetailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeBookDetails()">
+            <i class="fas fa-times-circle"></i>
+        </span>
+        <div id="bookDetails"></div>
+    </div>
+</div>
+
 
 
 <!-- Footer -->
@@ -381,19 +477,17 @@
 </footer>
 
 
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        var bookManagementLink = document.querySelector('.nav-link[href="bookManagement.html"]');
-
-        if (!currentUserId.endsWith('@admin.com')) {
-            bookManagementLink.style.display = 'none';
-        }
-    });
-</script>
-
 <!-- Optional: Include Bootstrap 5 and Font Awesome Icons JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+<script type="text/javascript">
+    window.onclick = function(event) {
+        var modal = document.getElementById("bookDetailsModal");
+        if (event.target == modal) {
+            closeBookDetails();
+        }
+    }
+</script>
 </body>
 
 </html>

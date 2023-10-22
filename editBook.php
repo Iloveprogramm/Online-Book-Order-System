@@ -143,6 +143,8 @@
     </div>
 </nav>
 
+<a href="viewEditHistory.php" class="btn btn-secondary">View Edit History</a>
+
 <div class="container mt-5">
     <h2>Edit Books</h2>
 

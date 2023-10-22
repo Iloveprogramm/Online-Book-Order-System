@@ -2,7 +2,6 @@
 ob_start();
 session_start();
 
-
 // Check if running in a command line interface (CLI) environment to disable redirection and layout when testing
 if (php_sapi_name() === 'cli') {
     define('IS_TESTING', true);
@@ -20,6 +19,13 @@ function getDatabaseConnection() {
     return $conn;
 }
 
+function addEditHistory($conn, $bookID, $oldValue, $newValue) {
+    $sql = "INSERT INTO book_edit_history (book_id, old_value, new_value) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iss", $bookID, $oldValue, $newValue);
+    $stmt->execute();
+}
+
 function editBook($conn, $bookData) {
     $bookID = $bookData["bookID"];
     $title = $bookData["title"];
@@ -31,10 +37,24 @@ function editBook($conn, $bookData) {
     $sql = "UPDATE Books SET Title=?, Author=?, Price=?, Category=? WHERE BookID=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssdsi", $title, $author, $price, $category, $bookID);
+
+    // Fetch old book data before updating
+    $oldBookData = getBookDetails($conn, $bookID);
     
     if ($stmt->execute()) {
         $_SESSION['message'] = 'Book details updated successfully!';
         $_SESSION['message_type'] = 'success';
+
+        // Add edit history after book is successfully updated
+        $newValue = json_encode([
+            'Title' => $title,
+            'Author' => $author,
+            'Price' => $price,
+            'Category' => $category
+        ]);
+        $oldValue = json_encode($oldBookData);
+        addEditHistory($conn, $bookID, $oldValue, $newValue);
+
         if (!IS_TESTING) {
             header("Location: editBook.php");
             exit;
@@ -49,7 +69,7 @@ function editBook($conn, $bookData) {
     }
 }
 
-//Get details about a specific book
+// Get details about a specific book
 function getBookDetails($conn, $bookID) {
     $sql = "SELECT BookID, Title, Author, Price, Category FROM Books WHERE BookID=?";
     $stmt = $conn->prepare($sql);

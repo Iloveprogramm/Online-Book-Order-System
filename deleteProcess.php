@@ -1,24 +1,58 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
+
 include 'db_config.php';
-// Retrieve book ID from POST request
-if(isset($_POST['bookIdToDelete'])) {
+
+// Delete single book
+if (isset($_POST['bookIdToDelete'])) {
     $bookId = $_POST['bookIdToDelete'];
 
-    // Delete the book from the database
     $sql = "DELETE FROM Books WHERE BookID = ?";
-    
-    // Prepare statement
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $bookId);  // 'i' indicates that we're binding an integer
-    
-    if($stmt->execute()) {
-        if (PHP_SAPI !== 'cli') {
-            echo "Book deleted successfully!";
+    $stmt->bind_param('i', $bookId);
+
+    try {
+        if ($stmt->execute()) {
+            $_SESSION['message'] = "Book deleted successfully!";
+            $_SESSION['msg_type'] = "success";
         }
-    } else {
-        if (PHP_SAPI !== 'cli') {
-            echo "Error deleting book: " . $stmt->error;
+    } catch (mysqli_sql_exception $e) {
+        if ($e->getCode() == 1451) { // 1451 is the error code for foreign key constraint fails
+            $_SESSION['message'] = "The book cannot be deleted because the shopping cart has already been added. The shopping cart needs to be emptied before it can be。";
+        } else {
+            $_SESSION['message'] = "Error deleting book: " . $e->getMessage();
         }
+        $_SESSION['msg_type'] = "error";
+    }
+
+    $stmt->close();
+}
+
+// Delete multiple books
+if (isset($_POST['booksToDelete'])) {
+    $bookIds = $_POST['booksToDelete'];
+    $placeHolders = implode(',', array_fill(0, count($bookIds), '?'));
+    $types = str_repeat('i', count($bookIds));
+
+    $sql = "DELETE FROM Books WHERE BookID IN ($placeHolders)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param($types, ...$bookIds);
+
+    try {
+        if ($stmt->execute()) {
+            $_SESSION['message'] = count($bookIds) . " books deleted successfully!";
+            $_SESSION['msg_type'] = "success";
+        }
+    } catch (mysqli_sql_exception $e) {
+        if ($e->getCode() == 1451) { 
+            $_SESSION['message'] = "Some books cannot be deleted because the shopping cart has been added. You need to empty the cart before you can.";
+        } else {
+            $_SESSION['message'] = "Error deleting books: " . $e->getMessage();
+        }
+        $_SESSION['msg_type'] = "error";
     }
 
     $stmt->close();
@@ -26,10 +60,6 @@ if(isset($_POST['bookIdToDelete'])) {
 
 $conn->close();
 
-// Redirect back to deleteBookList.php page
-if (PHP_SAPI !== 'cli' && !defined('PHPUNIT_COMPOSER_INSTALL')) {
-    header("Location: deleteBookList.php");
-    exit();
-}
-
+header("Location: deleteBookList.php");
+exit();
 ?>
