@@ -1,3 +1,11 @@
+CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'TestPass123!';
+
+GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'localhost';
+
+FLUSH PRIVILEGES;
+
+
+
 CREATE TABLE Books (
     BookID INT AUTO_INCREMENT PRIMARY KEY,
     Title VARCHAR(255) NOT NULL,
