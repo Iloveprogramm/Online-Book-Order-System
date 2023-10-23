@@ -172,8 +172,8 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 }
 
 .close-btn {
-    position: absolute;  /* 添加绝对定位 */
-    top: 10px;          /* 调整距离顶部的位置 */
+    position: absolute;  
+    top: 10px;          
     right: 10px; 
     background-color: #ff5757;
     color: white;
@@ -370,7 +370,7 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
             echo '<p class="card-text mt-auto mb-2">By: ' . $row["Author"] . '</p>';
             echo '<p class="card-text mb-2">$' . number_format($row["Price"], 2) . '</p>';
             echo '<button class="btn btn-outline-primary mt-auto" onclick="addToCart(event, ' . $row["BookID"] . ')">Add to Cart</button>';
-            echo '<button class="btn btn-outline-primary mt-auto" onclick="addToWishlist(' . $row["BookID"] . ')">Wishlist</button>';
+            echo '<button class="btn btn-outline-primary mt-auto" onclick="addToWishlist(event, ' . $row["BookID"] . ')">Wishlist</button>';  // 添加 event 参数
             echo '</div>';
             echo '</div>';
             echo '</div>';
@@ -401,41 +401,39 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
         modal.style.display = "none";
     };
 
-    function addToWishlist(bookId) {
+    function addToWishlist(event, bookId) {
+        event.stopPropagation();  
+
         var xhr = new XMLHttpRequest();
         var url = "add-To-Wishlist.php?book_id=" + bookId;
         xhr.open("GET", url, true);
 
         xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-        var modal = document.getElementById("myModal");
-        var statusMessage = document.getElementById("statusMessage");
+            if (xhr.readyState === 4) {
+                var modal = document.getElementById("myModal");
+                var statusMessage = document.getElementById("statusMessage");
 
-        try {
-            var response = JSON.parse(xhr.responseText);
+                try {
+                    var response = JSON.parse(xhr.responseText);
 
-            if (response.status === "success") {
-                // Success message
-                statusMessage.innerHTML = response.message;
-            } else {
-                // Error or info message
-                statusMessage.innerHTML = response.message;
+                    if (response.status === "success") {
+                        statusMessage.innerHTML = response.message;
+                    } else {
+                        statusMessage.innerHTML = response.message;
+                    }
+                } catch (error) {
+                    statusMessage.innerHTML = "Error: Unexpected response from the server.";
+                }
+
+                modal.style.display = "block";
             }
-        } catch (error) {
-            // Handle JSON parsing error (unexpected response)
-            statusMessage.innerHTML = "Error: Unexpected response from the server.";
-        }
-
-        // Display the modal
-        modal.style.display = "block";
-    }
-};
+        };
 
         xhr.send();
     }
 
     function addToCart(event, bookId) {
-    event.stopPropagation();  // 阻止事件冒泡
+    event.stopPropagation();  
 
     var xhr = new XMLHttpRequest();
     var url = "addToCart.php?book_id=" + bookId;
