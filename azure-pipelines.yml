@@ -63,3 +63,9 @@ steps:
 # - script: |
 #     ./phpunit --verbose ./Test/
 #   displayName: 'Pass all Test (PHPUnit Test)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
