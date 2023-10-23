@@ -40,7 +40,8 @@
         }
 
         .welcome-section {
-            height: 70vh;
+            height: 80vh;
+            padding: 50px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -49,8 +50,25 @@
             color: var(--secondary-color);
         }
 
-        .welcome-section a {
-            margin: 0 10px;
+        .carousel {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .carousel-item {
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .mt-4 {
+            margin-top: 40px !important;
         }
 
         .btn-outline-light {
@@ -74,11 +92,26 @@
     </div>
 </nav>
 
-
 <!-- Welcome Section -->
 <section class="welcome-section">
     <h1>Welcome to BookQuartets</h1>
     <p>Your premium book destination is just a click away!</p>
+    
+    <!-- Larger Carousel -->
+    <div id="carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://source.unsplash.com/800x500/?book" class="d-block w-100" alt="Book Image 1">
+            </div>
+            <div class="carousel-item">
+                <img src="https://source.unsplash.com/800x500/?bookstore" class="d-block w-100" alt="Book Image 2">
+            </div>
+            <div class="carousel-item">
+                <img src="https://source.unsplash.com/800x500/?library" class="d-block w-100" alt="Book Image 3">
+            </div>
+        </div>
+    </div>
+    
     <div class="mt-4">
         <a href="login.html" class="btn btn-outline-light">Login</a>
         <a href="register.html" class="btn btn-outline-light">Register</a>
