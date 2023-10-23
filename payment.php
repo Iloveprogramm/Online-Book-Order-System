@@ -157,7 +157,7 @@
                 if(response.status === 'success') {
                     $('#orderSuccessMessage').text('Order and payment details stored successfully!\nYour Order Number is: ' + response.orderNumber);
 
-                    // 添加这里: 清空购物车的 AJAX 请求
+                   
                     $.get('clear_cart.php', function(clearCartResponse) {
                         if(clearCartResponse.status !== 'success') {
                             console.error('Failed to clear the cart');

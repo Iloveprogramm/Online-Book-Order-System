@@ -1,6 +1,6 @@
 <?php
-require 'PHPMailer-master/src/PHPMailer.php';  // 请根据实际路径修改
-require 'PHPMailer-master/src/SMTP.php';  // 请根据实际路径修改
+require 'PHPMailer-master/src/PHPMailer.php';  
+require 'PHPMailer-master/src/SMTP.php';  
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;

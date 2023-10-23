@@ -13,7 +13,7 @@
     $sql = "SELECT * FROM Books WHERE BookID = $bookId";
     $result = $conn->query($sql);
 
-    header('Content-Type: application/json');  // 设置 Content-Type
+    header('Content-Type: application/json');  
 
     if ($result->num_rows > 0) {
         echo json_encode($result->fetch_assoc());
