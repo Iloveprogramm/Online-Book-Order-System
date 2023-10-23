@@ -5,22 +5,23 @@ GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'localhost';
 FLUSH PRIVILEGES;
 
 
-
 CREATE TABLE Books (
     BookID INT AUTO_INCREMENT PRIMARY KEY,
     Title VARCHAR(255) NOT NULL,
     Author VARCHAR(255) NOT NULL,
     Price DECIMAL(10, 2),
     ImageURL VARCHAR(255),
-    Category VARCHAR(255) NOT NULL
+    Category VARCHAR(255) NOT NULL,
+    Description TEXT
 );
 
-INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES
-('Thinking in Java', 'Bruce Eckel', 99.00, './Image/Effective Java Programming.png', 'Programming'),
-('The Marxification of Education', 'James Lindsay', 28.48, './Image/The Marxification of Education(Education).png', 'Education'),
-('Reminders of Him', 'Colleen Hoover', 16.00, './Image/Reminders of Him(Novel).png', 'Novel'),
-('The Complete Far Side', 'Gary Larson', 200.00, './Image/The Complete Far Side(Cartoon).png', 'Cartoon'),
-('History of the World Map by Map', 'DK', 70.61, './Image/History of the World Map by Map.png', 'History');
+INSERT INTO Books (Title, Author, Price, ImageURL, Category, Description) VALUES
+('Thinking in Java', 'Bruce Eckel', 99.00, './Image/Effective Java Programming.png', 'Programming', 'A classic book for learning Java programming with various examples and exercises.'),
+('The Marxification of Education', 'James Lindsay', 28.48, './Image/The Marxification of Education(Education).png', 'Education', 'An exploration of the influence of Marxism in shaping current educational policies.'),
+('Reminders of Him', 'Colleen Hoover', 16.00, './Image/Reminders of Him(Novel).png', 'Novel', 'A heartfelt novel about love, loss, and redemption.'),
+('The Complete Far Side', 'Gary Larson', 200.00, './Image/The Complete Far Side(Cartoon).png', 'Cartoon', 'A collection of iconic comics from The Far Side.'),
+('History of the World Map by Map', 'DK', 70.61, './Image/History of the World Map by Map.png', 'History', 'A visual representation of global history, told through maps.');
+
 
 
 CREATE TABLE UserTable (
