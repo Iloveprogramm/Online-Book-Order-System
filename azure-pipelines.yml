@@ -30,7 +30,6 @@ steps:
     chmod +x phpunit
   displayName: 'Setup PHPUnit'
 
-
 # Wait for MySQL to be ready
 - script: |
     until echo exit | nc localhost 3306; do sleep 10; done
@@ -53,17 +52,18 @@ steps:
   displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
 
 - script: |
-     ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
+    ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
   displayName: 'Pass the specific Payment Test (PHPUnit Test)'
   
-# - script: |
-#     ./phpunit --verbose ./ReviewTest/
-#   displayName: 'Pass all Review Test (PHPUnit Test)'
+# Copy files to the staging directory
+- task: CopyFiles@2
+  displayName: 'Copy Files to Staging Directory'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'  
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# - script: |
-#     ./phpunit --verbose ./Test/
-#   displayName: 'Pass all Test (PHPUnit Test)'
-
+# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
