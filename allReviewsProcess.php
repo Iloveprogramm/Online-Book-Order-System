@@ -36,3 +36,33 @@ function displayAllReviews() {
 }
 ?>
 
+<script>
+function confirmDelete(reviewId) {
+    if (confirm('Are you sure you want to delete this review?')) {
+        deleteReview(reviewId);
+    }
+}
+
+function deleteReview(reviewId) {
+    fetch('deleteReview.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reviewID: reviewId })  
+    })
+    .then(response => response.json())  
+    .then(data => {
+        if(data.status === 'success') {
+            alert(data.message);
+            location.reload();  
+        } else {
+            alert(data.message);  
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+
