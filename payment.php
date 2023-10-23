@@ -11,6 +11,12 @@
 </head>
 
 <body>
+<div class="ripple-loader" id="ripple-loader">
+    <div class="ripple"></div>
+    <div class="ripple"></div>
+    <div class="ripple"></div>
+</div>
+
 
 <div class="payment-container">
     <div class="payment-box">
@@ -48,8 +54,9 @@
 
         <!-- Payment Option -->
         <form action="store-payment.php" method="post" id="paymentForm">
-        <input type="hidden" name="cartItemsHTML" value="<?php echo isset($_POST['cartItemsHTML']) ? htmlspecialchars($_POST['cartItemsHTML']) : ''; ?>">
-        <input type="hidden" name="totalAmount" value="<?php echo isset($_POST['totalAmount']) ? htmlspecialchars($_POST['totalAmount']) : '0.00'; ?>">
+            <input type="hidden" name="cartItemsHTML" value="<?php echo isset($_POST['cartItemsHTML']) ? htmlspecialchars($_POST['cartItemsHTML']) : ''; ?>">
+            <input type="hidden" name="totalAmount" value="<?php echo isset($_POST['totalAmount']) ? htmlspecialchars($_POST['totalAmount']) : '0.00'; ?>">
+
             <div class="input-form">
                 <label for="payment-option" class="form-label">Payment Option</label>
                 <select id="payment-option" name="payment-method">
@@ -60,8 +67,19 @@
             </div>
 
             <!-- Payment Details -->
-            <div id="payment-details" style="display: none;">
-                <!-- This will be filled by JavaScript based on payment method selection -->
+            <div id="payment-details" style="display: none;"></div>
+
+            <br>
+
+            <!-- Email Notification Option -->
+            <div class="input-form">
+                <input type="checkbox" id="notifyByEmail" name="notifyByEmail">
+                <label for="notifyByEmail" class="form-label">Notify me by email</label>
+            </div>
+
+            <div id="emailField" style="display: none;" class="input-form">
+                <label for="customerEmail" class="form-label">Email Address</label>
+                <input type="email" id="customerEmail" name="customerEmail" placeholder="example@example.com" required>
             </div>
 
             <br>
@@ -71,7 +89,6 @@
 
     </div>
 </div>
-
 
 <!-- Custom modal -->
 <div id="successModal" class="modal" tabindex="-1">
@@ -118,47 +135,58 @@
                     </div>
                 </div>
             `;
-            // Show the payment details section
             paymentDetails.style.display = 'block';
-        }else {
-            // Hide the payment details section if a different option is selected
+        } else {
             paymentDetails.style.display = 'none';
         }
     });
 
     $("#paymentForm").submit(function(e) {
-    e.preventDefault();
-    
-    $.ajax({
-        url: 'store-payment.php', 
-        type: 'post',
-        data: $(this).serialize(),
-        dataType: 'json',
-        success: function(response) {
-            if(response.status === 'success') {
-                $('#orderSuccessMessage').text('Order and payment details stored successfully!\nYour Order Number is: ' + response.orderNumber);
-                
-                var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
-                    keyboard: false,
-                    backdrop: 'static'
-                });
-                successModal.show();
-            } else {
-                alert(response.message); 
-            }
-        },
-        error: function() {
+        e.preventDefault();
+
+        // Show the ripple loader
+    $('#ripple-loader').css('display', 'block');
+
+        $.ajax({
+            url: 'store-payment.php',
+            type: 'post',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                // Hide the ripple loader
+            $('#ripple-loader').css('display', 'none');
+                if(response.status === 'success') {
+                    $('#orderSuccessMessage').text('Order and payment details stored successfully!\nYour Order Number is: ' + response.orderNumber);
+
+                    var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
+                        keyboard: false,
+                        backdrop: 'static'
+                    });
+                    successModal.show();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                // Hide the ripple loader and show an error message
+            $('#ripple-loader').css('display', 'none');
             alert('An error occurred. Please try again.');
+            }
+        });
+    });
+
+    $('#continueButton').click(function() {
+        window.location.href = 'EditShipping.html';
+    });
+
+    $('#notifyByEmail').change(function() {
+        if($(this).prop('checked')) {
+            $('#emailField').show();
+        } else {
+            $('#emailField').hide();
         }
     });
-});
-
-$('#continueButton').click(function() {
-    window.location.href = 'Main.php';
-});
-
 </script>
 
 </body>
-
 </html>

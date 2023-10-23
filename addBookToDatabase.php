@@ -4,10 +4,10 @@ function addBookToDatabase($data)
 {
     include 'db_config.php';
 
-    $stmt = $conn->prepare("INSERT INTO Books (Title, Author, Price, ImageURL, Category) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO Books (Title, Author, Price, ImageURL, Category, Description) VALUES (?, ?, ?, ?, ?, ?)");
 
     // Bind parameters to prepared statements
-    $stmt->bind_param("sssss", $bookTitle, $bookAuthor, $bookPrice, $bookImgUrl, $bookCategory);
+    $stmt->bind_param("ssssss", $bookTitle, $bookAuthor, $bookPrice, $bookImgUrl, $bookCategory, $bookDescription);
 
     //Extract book information from the passed data array
     $bookTitle = $data['bookTitle'];
@@ -15,6 +15,7 @@ function addBookToDatabase($data)
     $bookPrice = $data['bookPrice'];
     $bookImgUrl = $data['bookImgUrl'];
     $bookCategory = $data['bookCategory'];
+    $bookDescription = $data['bookDescription'];  
 
     // If the prepared statement is executed successfully
     //close the statement and connection and return a successful JSON response.
@@ -28,7 +29,7 @@ function addBookToDatabase($data)
 }
 
 // Check whether the POST request was received
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {  
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
     header('Content-Type: application/json');
     echo addBookToDatabase($_POST);
 }

@@ -1,8 +1,15 @@
 <?php
+require 'PHPMailer-master/src/PHPMailer.php';  // 请根据实际路径修改
+require 'PHPMailer-master/src/SMTP.php';  // 请根据实际路径修改
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
 $paymentMethod = $_POST["payment-method"];
 $cardNumber = $_POST["card_number"];
 $expiry = $_POST["expiry"];
 $cvc = $_POST["cvc"];
+$email = isset($_POST["customerEmail"]) ? $_POST["customerEmail"] : null;
 
 // Validate expiry
 if(!preg_match("/^(0[1-9]|1[0-2])\/([0-9]{2})$/", $expiry)) {
@@ -17,7 +24,6 @@ if(strlen($cvc) !== 3 || !ctype_digit($cvc)) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve payment data from the form
     $itemsHTML = isset($_POST["cartItemsHTML"]) ? $_POST["cartItemsHTML"] : null;
     $totalAmount = isset($_POST["totalAmount"]) ? $_POST["totalAmount"] : null;
 
@@ -26,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;  
     }    
 
-    $orderNumber = time() . rand(1000, 9999);  // Generates a numeric order number
+    $orderNumber = time() . rand(1000, 9999); 
 
     $servername = "localhost";
     $username = "root";
@@ -35,41 +41,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Check connection
     if ($conn->connect_error) {
         echo json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]);
         exit;
     }
 
-    // Insert into Orders table first
     $sqlOrder = "INSERT INTO Orders (orderNumber, items, totalAmount) VALUES (?, ?, ?)";
     $stmtOrder = $conn->prepare($sqlOrder);
     $stmtOrder->bind_param("ssd", $orderNumber, $itemsHTML, $totalAmount);
 
     if ($stmtOrder->execute()) {
-        $orderID = $conn->insert_id;  // Get the ID of the newly created order
+        $orderID = $conn->insert_id;
 
-        // Insert into payment_details table
         $sqlPayment = "INSERT INTO payment_details (order_id, card_number, expiry, cvc) VALUES (?, ?, ?, ?)";
         $stmtPayment = $conn->prepare($sqlPayment);
         $stmtPayment->bind_param("isss", $orderID, $cardNumber, $expiry, $cvc);
 
         if ($stmtPayment->execute()) {
-            // Payment details were successfully stored
+            if($email && isset($_POST['notifyByEmail']) && $_POST['notifyByEmail'] === 'on') {
+                $mail = new PHPMailer();
+
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'chenjunzhengjim@gmail.com';
+                $mail->Password = 'dozw ccpk imie bmsu';
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                $mail->setFrom('chenjunzhengjim@gmail.com', 'Mailer'); 
+                $mail->addAddress($email); 
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Order Confirmation';
+                // Fetch cart items and total amount from POST request
+    $cartItemsHTML = isset($_POST['cartItemsHTML']) ? $_POST['cartItemsHTML'] : '';
+    $totalAmount = isset($_POST['totalAmount']) ? $_POST['totalAmount'] : '0.00';
+
+    // Construct mail body with cart items and total amount
+    $mail->Body = '<h2>Order Confirmation</h2>'
+                . '<p>Thank you for your order. Your order details are as follows:</p>'
+                . '<h3>Order Number: ' . $orderNumber . '</h3>'
+                . $cartItemsHTML
+                . '<p><strong>Total Amount:</strong> $' . htmlspecialchars($totalAmount) . '</p>'
+                . '<p>We will process your order soon. Thank you for shopping with us!</p>';
+
+
+                if(!$mail->send()) {
+                    echo json_encode(['status' => 'error', 'message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo]);
+                    exit;
+                }
+            }
+
             echo json_encode(['status' => 'success', 'orderNumber' => $orderNumber]);
         } else {
-            // Error occurred while storing payment details
             echo json_encode(['status' => 'error', 'message' => 'Error in storing payment details: ' . $stmtPayment->error]);
         }
         
         $stmtPayment->close();
-
     } else {
-        // Error occurred while storing order
         echo json_encode(['status' => 'error', 'message' => 'Error in storing order: ' . $stmtOrder->error]);
     }
 
-    // Close the database connection and the order statement
     $stmtOrder->close();
     $conn->close();
 }

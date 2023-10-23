@@ -154,77 +154,73 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
   cursor: pointer;
 }
 
-.close {
-    cursor: pointer;
-}
-
 .close i {
     font-size: 24px;
-    color: red;  /* 或其他你喜欢的颜色 */
+    color: red;  
 }
 
+.close i:hover {
+    color: darkred; 
+}
+
+
 .modal-content {
-    border-radius: 10px;  /* 增加圆角 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* 增加阴影 */
+    position: relative; 
+    border-radius: 10px;  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+    
+}
+
+.close-btn {
+    position: absolute;  /* 添加绝对定位 */
+    top: 10px;          /* 调整距离顶部的位置 */
+    right: 10px; 
+    background-color: #ff5757;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    float: right;
+    transition: background-color 0.3s;
+}
+
+.close-btn i {
+    margin-right: 5px;
+}
+
+.close-btn:hover {
+    background-color: #ff2e2e;
 }
     </style>
 
 <script type="text/javascript">
-        var books = [
-            {
-                id: 100020,
-                title: "Thinking in Java",
-                author: "Bruce Eckel",
-                price: 99.00,
-                category: "Programming",
-                description: "A classic book for learning Java programming with various examples and exercises."
-            },
-            {
-                id: 100021,
-                title: "The Marxification of Education",
-                author: "James Lindsay",
-                price: 28.48,
-                category: "Education",
-                description: "An exploration of the influence of Marxism in shaping current educational policies."
-            },
-            {
-                id: 100022,
-                title: "Reminders of Him",
-                author: "Colleen Hoover",
-                price: 16.00,
-                category: "Novel",
-                description: "A heartfelt novel about love, loss, and redemption."
-            },
-            {
-                id: 100023,
-                title: "The Complete Far Side",
-                author: "Gary Larson",
-                price: 200.00,
-                category: "Cartoon",
-                description: "A collection of iconic comics from The Far Side."
-            },
-            {
-                id: 100024,
-                title: "History of the World Map by Map",
-                author: "DK",
-                price: 70.61,
-                category: "History",
-                description: "A visual representation of global history, told through maps."
-            }
-        ];
-
         function viewBookDetails(bookId) {
-            var book = books.find(b => b.id === bookId);
-            if (book) {
-                var details = "<h2>" + book.title + "</h2>";
-                details += "<p>Author: " + book.author + "</p>";
-                details += "<p>Price: $" + book.price.toFixed(2) + "</p>";
-                details += "<p>Category: " + book.category + "</p>";
+    var xhr = new XMLHttpRequest();
+    var url = "getBookDetails.php?book_id=" + bookId;  
+    xhr.open("GET", url, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            console.log(xhr.responseText); 
+            try {
+                var book = JSON.parse(xhr.responseText);
+                var details = "<h2>" + book.Title + "</h2>";
+                details += "<p>Author: " + book.Author + "</p>";
+                details += "<p>Price: $" + parseFloat(book.Price).toFixed(2) + "</p>";
+                details += "<p>Category: " + book.Category + "</p>";
                 details += "<p>Description: " + book.description + "</p>";
                 document.getElementById("bookDetails").innerHTML = details;
                 document.getElementById("bookDetailsModal").style.display = "block";
+            } catch (error) {
+                console.error("Error parsing response", error);
             }
         }
+    };
+
+    xhr.send();
+}
+
 
         function closeBookDetails() {
             document.getElementById("bookDetailsModal").style.display = "none";
@@ -460,12 +456,13 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 <div id="bookDetailsModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeBookDetails()">
-            <i class="fas fa-times-circle"></i>
-        </span>
+        <button class="close-btn" onclick="closeBookDetails()">
+            <i class="fas fa-sign-out-alt"></i> Close
+        </button>
         <div id="bookDetails"></div>
     </div>
 </div>
+
 
 
 

@@ -62,15 +62,18 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-outline-primary {
-        border-color: var(--primary-color);
+    .btn-history {
+        background-color: var(--secondary-color);
         color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        transition: background-color 0.3s, color 0.3s;
     }
 
-    .btn-outline-primary:hover {
+    .btn-history:hover {
         background-color: var(--primary-color);
         color: var(--secondary-color);
     }
+
 
     .footer {
         background: var(--primary-color);
@@ -131,27 +134,39 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="#">BookQuartet</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="nav-link" href="bookManagement.html">
-<i class="fas fa-arrow-left"></i> Back to Book Management
-</a>
+                    <a href="viewEditHistory.php" class="btn btn-history me-3">View Edit History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="bookManagement.html">
+                        <i class="fas fa-arrow-left"></i> Back to Book Management
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<a href="viewEditHistory.php" class="btn btn-secondary">View Edit History</a>
-
 <div class="container mt-5">
     <h2>Edit Books</h2>
 
+    <form method="get" action="">
+        <label for="sortby">Sort by: </label>
+        <select name="sortby" id="sortby" onchange="this.form.submit()">
+            <option value="Title">Title</option>
+            <option value="Author">Author</option>
+            <option value="Category">Category</option>
+        </select>
+    </form>
+
     <?php
     session_start();
-    
-    // Display any messages set in the session
+
     if (isset($_SESSION['message'])) {
         $message = $_SESSION['message'];
         $messageType = $_SESSION['message_type'];
@@ -164,12 +179,10 @@
             });
         </script>";
 
-        // Clear the message so it's not shown again
         unset($_SESSION['message']);
         unset($_SESSION['message_type']);
     }
 
-    // Database connection
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -180,8 +193,8 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Fetch all books
-    $sql = "SELECT BookID, Title, Author, Price, Category FROM Books";
+    $sortby = isset($_GET['sortby']) ? $_GET['sortby'] : 'Title';
+    $sql = "SELECT BookID, Title, Author, Price, Category FROM Books ORDER BY $sortby";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -208,7 +221,6 @@
 
 </div>
 
-<!-- Footer -->
 <footer class="footer py-4">
     <div class="container">
         <div class="row">
@@ -220,4 +232,3 @@
 </footer>
 
 </body>
-</html>

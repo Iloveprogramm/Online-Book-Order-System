@@ -149,6 +149,8 @@ session_start();
         .custom-checkbox input[type="checkbox"]:checked ~ .checkmark::after {
             display: block;
         }
+
+        
     </style>
 </head>
 
@@ -194,7 +196,7 @@ session_start();
                     echo '<img src="' . $row["ImageURL"] . '" class="card-img" alt="Book Cover">';
                     echo '</div>';
                     echo '<div class="card-body d-flex flex-column">';
-                    echo '<input type="checkbox" name="booksToDelete[]" value="' . $row["BookID"] . '"> Delete';
+                    echo '<input type="checkbox" name="booksToDelete[]" value="' . $row["BookID"] . '">';
                     echo '<h5 class="card-title">' . $row["Title"] . ' (' . $row["Category"] . ')</h5>';
                     echo '<p class="card-text">By: ' . $row["Author"] . '</p>';
                     echo '<button type="button" onclick="confirmDelete(' . $row["BookID"] . ')" class="btn btn-danger mt-auto">Delete</button>'; // 修改为type="button"
