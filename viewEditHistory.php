@@ -124,7 +124,7 @@
             echo '<td>' . $row['book_id'] . '</td>';
             echo '<td>' . $row['old_value'] . '</td>';
             echo '<td>' . $row['new_value'] . '</td>';
-            echo '<td>' . $row['edit_timestamp'] . '</td>';
+            echo '<td>' . $row['edited_at'] . '</td>';
             echo '</tr>';
         }
         echo '</tbody>';
