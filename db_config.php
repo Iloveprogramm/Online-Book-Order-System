@@ -8,10 +8,3 @@ $dbname = "bookonlineorder";
 $conn = new mysqli($servername, $username, $password, $dbname);
 ?>
 
-<!--
-CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'TestPass123!';
-
-GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'localhost';
-
-FLUSH PRIVILEGES;
--->
