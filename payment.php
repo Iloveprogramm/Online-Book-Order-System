@@ -147,16 +147,22 @@
         // Show the ripple loader
     $('#ripple-loader').css('display', 'block');
 
-        $.ajax({
+    $.ajax({
             url: 'store-payment.php',
             type: 'post',
             data: $(this).serialize(),
             dataType: 'json',
             success: function(response) {
-                // Hide the ripple loader
-            $('#ripple-loader').css('display', 'none');
+                $('#ripple-loader').css('display', 'none');
                 if(response.status === 'success') {
                     $('#orderSuccessMessage').text('Order and payment details stored successfully!\nYour Order Number is: ' + response.orderNumber);
+
+                    // 添加这里: 清空购物车的 AJAX 请求
+                    $.get('clear_cart.php', function(clearCartResponse) {
+                        if(clearCartResponse.status !== 'success') {
+                            console.error('Failed to clear the cart');
+                        }
+                    }, 'json');
 
                     var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
                         keyboard: false,
@@ -168,9 +174,8 @@
                 }
             },
             error: function() {
-                // Hide the ripple loader and show an error message
-            $('#ripple-loader').css('display', 'none');
-            alert('An error occurred. Please try again.');
+                $('#ripple-loader').css('display', 'none');
+                alert('An error occurred. Please try again.');
             }
         });
     });

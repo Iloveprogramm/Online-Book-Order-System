@@ -156,6 +156,7 @@
                 <input type="hidden" id="total-amount" name="totalAmount" value="<?php echo $totalAmount; ?>">
                 <button type="submit" id="checkout-button" style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
             </form>
+            <button id="clear-cart-button" style="background-color: red; border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Clear Cart</button>
             <a href="order-history.php" class="btn btn-secondary" style="width: 100%; margin-bottom: 20px; display: block; text-align: center;">Order History</a> 
             <div style="text-align: center; font-size: 12px; color: grey; margin-bottom: 10px;">Secured by BookQuartet</div>
 
@@ -254,6 +255,18 @@ function calculateSubtotal() {
     $('#subtotal').text('$' + total.toFixed(2)); 
     document.getElementById('total-amount').value = total.toFixed(2); // Set the hidden input's value
 }
+
+document.getElementById('clear-cart-button').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear your cart?')) {
+                $.get('clear_cart.php', function(data) {
+                    if (data.status === 'success') {
+                        location.reload();
+                    } else {
+                        alert('There was an error clearing the cart. Please try again.');
+                    }
+                }, 'json');
+            }
+        });
 
 </script>
 </body>
