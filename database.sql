@@ -64,6 +64,21 @@ CREATE TABLE cart (
     FOREIGN KEY (book_id) REFERENCES Books(BookID)
 );
 
+CREATE TABLE shipping_Companies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(255) NOT NULL,
+    date_added DATE NOT NULL,
+    cost_per_Kilo DECIMAL(10, 2) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+    email_address VARCHAR(255) NOT NULL,
+    average_shipping_time INT NOT NULL
+);
+
+INSERT INTO shipping_Companies (company_name, date_added, cost_per_Kilo, phone_number, email_address, average_shipping_time) VALUES
+('Fastway Shipping', '2012-08-18', 13.50, '0487653132', 'FastwayShipping@email.com', 2),
+('Medium Transport group', '2017-01-09', 10.00, '0439146232', 'MedTranspG@email.com', 5),
+('Scenic couriers', '2016-06-07', 7.50, '0429099142', 'Scenic@email.com', 8);
+
 CREATE TABLE IF NOT EXISTS Orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     orderNumber VARCHAR(255) NOT NULL,
