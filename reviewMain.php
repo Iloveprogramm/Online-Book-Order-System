@@ -18,11 +18,6 @@
   <div class="container">
     <a class="navbar-brand" href="#">BookQuartet</a>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="bookManagement.html"><i class="fas fa-cogs"></i> Book Managements</a>
-        </li>
-      </ul>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item me-3">
           <a class="nav-link" href="userprofile.html">
