@@ -95,6 +95,7 @@
 
     $totalAmount = 0.0;
     $cartItemsHTML = "";
+    $itemQuantity = 0;
 
     if ($cartId) {
         $stmt = $conn->prepare("SELECT c.quantity, b.BookID, b.Title, b.Author, b.Price, b.ImageURL 
@@ -113,6 +114,7 @@
                         $cartItemsHTML .= '<img src="' . $row["ImageURL"] . '" alt="' . $row["Title"] . '" style="width: 100px; margin-right: 20px;">';
                         $cartItemsHTML .= '<span>' . $row["Title"] . '</span>';
                         $cartItemsHTML .= '</div>';
+                        $itemQuantity += $row["quantity"];
                         echo '<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background-color: white; display: flex; justify-content: space-between; align-items: center;">';
                         echo '<div style="display: flex; align-items: center;">';
                         echo '<img src="' . $row["ImageURL"] . '" alt="' . $row["Title"] . '" style="width: 100px; margin-right: 20px;">';
@@ -154,6 +156,7 @@
                 <input type="hidden" id="cart-items-html" name="cartItemsHTML" value="<?php echo htmlspecialchars($cartItemsHTML, ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" id="cart-items" name="cartItems" value="">
                 <input type="hidden" id="total-amount" name="totalAmount" value="<?php echo $totalAmount; ?>">
+                <input type="hidden" id="itemQuantity" name="itemQuantity" value="<?php echo $itemQuantity; ?>">
                 <button type="submit" id="checkout-button" style="background-color: rgb(3, 192, 255); border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Checkout</button>
             </form>
             <button id="clear-cart-button" style="background-color: red; border: none; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; width: 100%; margin-bottom: 20px;">Clear Cart</button>

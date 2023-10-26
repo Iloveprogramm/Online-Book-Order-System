@@ -41,6 +41,70 @@
             </ul>
         </div>
 
+        <div class="shipping-container">
+            <div class="row gy-4">
+                <?php
+
+                    if (isset($_POST['itemQuantity'])) 
+                    {
+                        $numberOfItems = (int)$_POST['itemQuantity'];
+                    } 
+                    else 
+                    {
+                        $numberOfItems = 0; // Or another default value
+                    }
+
+                    
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "";
+                    $dbname = "bookonlineorder";
+                
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    // Check connection
+                
+                    // Query to retrieve shipping companies
+                    $query = "SELECT company_name, cost_per_Kilo, average_shipping_time FROM shipping_companies";
+                    
+                    $stmt = $conn->prepare($query);
+                    
+                    if (!$stmt) {
+                        echo "Error preparing statement: " . $conn->error;
+                        exit();
+                    }
+                    
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        echo "<table id='shippingCompanyTable'>";
+                        echo "<tr>
+                                <th>Company Name</th>
+                                <th>Cost per Kilo</th>
+                                <th>Average Shipping Time (days)</th>
+                                <th>Select</th>
+                            </tr>";
+                        
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row["company_name"] . "</td>";
+                            echo "<td>" . $row["cost_per_Kilo"] . "</td>";
+                            echo "<td>" . $row["average_shipping_time"] . "</td>";
+                            echo "<td><input type='radio' name='selectedCompany' value='" . $row["company_name"] . "'></td>";
+                            echo "</tr>";
+                        }
+                        
+                        echo "</table>";
+                        
+                    } else {
+                        echo "No shipping companies found in the database.";
+                    }
+                ?>
+            </div>
+        </div>
+
+
         <!-- Total Amount -->
         <div class="total-container">
             <strong>Total Amount:</strong>
@@ -48,6 +112,11 @@
                 $totalAmount = isset($_POST['totalAmount']) ? $_POST['totalAmount'] : "0.00";
                 echo "$" . $totalAmount;
             ?>
+        </div>
+
+        
+        <div id="shipping-cost">
+            Shipping Cost: <span id="cost-value">$0.00</span>
         </div>
 
         <br>
@@ -190,6 +259,35 @@
         } else {
             $('#emailField').hide();
         }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const shippingCompanyTable = document.getElementById("shippingCompanyTable");
+        const costValue = document.getElementById("cost-value");
+
+        // Add an event listener to the shipping company table to listen for changes in the selection
+        shippingCompanyTable.addEventListener("change", function (event) {
+            const selectedCompanyInput = event.target;
+            
+            if (selectedCompanyInput.type === 'radio' && selectedCompanyInput.checked) {
+                const selectedCompany = selectedCompanyInput.value;
+                const costPerKilo = parseFloat(
+                    selectedCompanyInput
+                        .closest("tr")
+                        .querySelector("td:nth-child(2)")
+                        .textContent
+                );
+                const numberOfItems = <?php echo $numberOfItems; ?>; // Get the number of items from PHP
+
+                // Calculate the shipping cost
+                const shippingCost = costPerKilo * numberOfItems;
+
+                // Update the display
+                costValue.textContent = "$" + shippingCost.toFixed(2);
+            }
+        });
     });
 </script>
 

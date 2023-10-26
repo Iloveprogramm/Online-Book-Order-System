@@ -232,9 +232,11 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
         document.addEventListener('DOMContentLoaded', function () {
             var bookManagementLink = document.querySelector('.nav-link[href="bookManagement.html"]');
+            var adminLink = document.querySelector('.nav-link[href="shippingCompanyManagment.php"]');
 
             if (!currentUserId.endsWith('@admin.com')) {
                 bookManagementLink.style.display = 'none';
+                adminLink.style.display = 'none';
             }
         });
     </script>
@@ -248,6 +250,9 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="bookManagement.html"><i class="fas fa-cogs"></i> Book Managements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="shippingCompanyManagment.php"><i class="fas fa-cog"></i> Shipping Management</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
