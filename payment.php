@@ -40,7 +40,7 @@
                 ?>
             </ul>
         </div>
-        
+
         <!-- Total Amount -->
         <div class="total-container">
             <strong>Total Amount:</strong>
@@ -79,7 +79,7 @@
 
             <div id="emailField" style="display: none;" class="input-form">
                 <label for="customerEmail" class="form-label">Email Address</label>
-                <input type="email" id="customerEmail" name="customerEmail" placeholder="example@example.com" required>
+                <input type="email" id="customerEmail" name="customerEmail" placeholder="example@example.com">
             </div>
 
             <br>
