@@ -40,7 +40,7 @@
                 ?>
             </ul>
         </div>
-
+        
         <!-- Total Amount -->
         <div class="total-container">
             <strong>Total Amount:</strong>
