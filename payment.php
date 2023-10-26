@@ -105,18 +105,25 @@
         </div>
 
 
-        <!-- Total Amount -->
+        <!-- item cost -->
         <div class="total-container">
-            <strong>Total Amount:</strong>
+            <strong>Item Cost :</strong>
             <?php
                 $totalAmount = isset($_POST['totalAmount']) ? $_POST['totalAmount'] : "0.00";
                 echo "$" . $totalAmount;
             ?>
         </div>
 
-        
-        <div id="shipping-cost">
-            Shipping Cost: <span id="cost-value">$0.00</span>
+        <div class="total-container">
+            <div id="shipping-cost">
+                <strong>Shipping Cost:</strong> <span id="cost-value">$0.00</span>
+            </div>
+        </div>
+
+        <div class="total-container">
+            <div id="total-cost">
+                <strong>Total Cost:</strong> <span id="total-cost">$0.00</span>
+            </div>
         </div>
 
         <br>
@@ -289,6 +296,27 @@
             }
         });
     });
+</script>
+
+<script>
+    // Function to update the total cost
+    function updateTotalCost() {
+        // Get the item cost and shipping cost
+        const itemCost = parseFloat(<?php echo $totalAmount; ?>);
+        const shippingCost = parseFloat(document.getElementById("cost-value").textContent.replace("$", ""));
+        
+        // Calculate the total cost
+        const totalCost = itemCost + shippingCost;
+
+        // Update the total cost element
+        document.getElementById("total-cost").querySelector("span").textContent = "$" + totalCost.toFixed(2);
+    }
+
+    // Add an event listener to shipping cost changes
+    document.getElementById("shipping-cost").addEventListener("DOMSubtreeModified", updateTotalCost);
+
+    // Initial call to set the total cost
+    updateTotalCost();
 </script>
 
 </body>

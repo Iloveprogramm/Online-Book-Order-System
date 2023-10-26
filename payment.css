@@ -43,6 +43,11 @@ body {
     margin-top: 10px;
 }
 
+#shipping-cost {
+    text-align: right;
+    margin-top: 10px;
+}
+
 h2 {
     font-size: 30px;
     color: black;
