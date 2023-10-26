@@ -218,7 +218,7 @@
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "<table>";
+        echo "<table id='shippingCompanyTable'>";
         echo "<tr>
                 <th>ID</th>
                 <th>Company Name</th>
@@ -250,6 +250,20 @@
         echo "No shipping companies found in the database.";
     }
 
+    echo "<table>";
+    echo "<tr>";
+    echo "<td><input type='text' id='newCompanyName' placeholder='Company Name'></td>";
+    echo "<td><input type='text' id='newCostPerKilo' placeholder='Cost per Kilo'></td>";
+    echo "<td><input type='text' id='newPhoneNumber' placeholder='Phone Number'></td>";
+    echo "<td><input type='text' id='newEmailAddress' placeholder='Email Address'></td>";
+    echo "<td><input type='text' id='newAverageShippingTime' placeholder='Average Shipping Time'></td>";
+    echo "<td><button onclick='addNewCompany()'>Add Company</button></td>";
+    echo "</tr>";
+
+    echo "</table>";
+
+    //code here    
+
     $conn->close();
     ?>
 
@@ -272,40 +286,122 @@
         modal.style.display = "none";
     };
 
-    function removeFromDatabase(id) {
+    function removeFromDatabase(id) 
+    {
         var xhr = new XMLHttpRequest();
         var url = "removeShippingCompany.php?id=" + id;
         xhr.open("GET", url, true);
 
-        xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-        var modal = document.getElementById("myModal");
-        var statusMessage = document.getElementById("statusMessage");
+        xhr.onreadystatechange = function() 
+        {
+            if (xhr.readyState === 4) 
+            {
+                var modal = document.getElementById("myModal");
+                var statusMessage = document.getElementById("statusMessage");
 
-        try {
-            var response = JSON.parse(xhr.responseText);
-
-            if (response.status === "success") {
-                // Success message
-                statusMessage.innerHTML = response.message;
-                var rowToRemove = document.getElementById('row_' + id);
-                if (rowToRemove) 
+                try 
                 {
-                    rowToRemove.remove();
-                }
-            } else {
-                // Error or info message
-                statusMessage.innerHTML = response.message;
-            }
-        } catch (error) {
-            // Handle JSON parsing error (unexpected response)
-            statusMessage.innerHTML = "Error: Unexpected response from the server.";
-        }
+                    var response = JSON.parse(xhr.responseText);
 
-        // Display the modal
-        modal.style.display = "block";
+                    if (response.status === "success") 
+                    {
+                        // Success message
+                        statusMessage.innerHTML = response.message;
+                        var rowToRemove = document.getElementById('row_' + id);
+                        if (rowToRemove) 
+                        {
+                            rowToRemove.remove();
+                        }
+                    } 
+                    else 
+                    {
+                        // Error or info message
+                        statusMessage.innerHTML = response.message;
+                    }
+                } 
+                catch (error) 
+                {
+                    // Handle JSON parsing error (unexpected response)
+                    statusMessage.innerHTML = "Error: Unexpected response from the server.";
+                }
+
+                // Display the modal
+                modal.style.display = "block";
+            }
+        };
+
+        xhr.send();
     }
-};
+
+    function addNewCompany() 
+    {
+        var newCompanyName = document.getElementById('newCompanyName').value;
+        var newCostPerKilo = document.getElementById('newCostPerKilo').value;
+        var newPhoneNumber = document.getElementById('newPhoneNumber').value;
+        var newEmailAddress = document.getElementById('newEmailAddress').value;
+        var newAverageShippingTime = document.getElementById('newAverageShippingTime').value;
+
+        var xhr = new XMLHttpRequest();
+        var url = "addShippingCompany.php";  // Use a separate PHP file for adding companies
+        var params = "CompanyName=" + newCompanyName +
+                    "&CostPerKilo=" + newCostPerKilo +
+                    "&PhoneNumber=" + newPhoneNumber +
+                    "&EmailAddress=" + newEmailAddress +
+                    "&AverageShippingTime=" + newAverageShippingTime;
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() 
+        {
+            if (xhr.readyState === 4) 
+            {
+                var modal = document.getElementById("myModal");
+                var statusMessage = document.getElementById("statusMessage");
+
+                try 
+                {
+                    var response = JSON.parse(xhr.responseText);
+
+                    if (response.status === "success") 
+                    {
+                        // Success message
+                        statusMessage.innerHTML = response.message;
+
+                        refreshTable();
+                    } 
+                    else 
+                    {
+                        // Error or info message
+                        statusMessage.innerHTML = response.message;
+                    }
+                } 
+                catch (error) 
+                {
+                    // Handle JSON parsing error (unexpected response)
+                    statusMessage.innerHTML = "Error: Unexpected response from the server.";
+                }
+
+                // Display the modal
+                modal.style.display = "block";
+            }
+        };
+        xhr.send(params);
+    }
+
+    function refreshTable() 
+    {
+        var tableContainer = document.getElementById("shippingCompanyTable");
+        var xhr = new XMLHttpRequest();
+        var url = "retrieveCompanyInfo.php";
+
+        xhr.open("GET", url, true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                tableContainer.innerHTML = xhr.responseText; // Update the table content with the updated data
+            }
+        };
 
         xhr.send();
     }
