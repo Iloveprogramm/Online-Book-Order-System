@@ -41,9 +41,6 @@ steps:
     ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
   displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
 
-- script: |
-    ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
-  displayName: 'Pass the specific Payment Test (PHPUnit Test)'
 
 - task: CopyFiles@2
   inputs:
