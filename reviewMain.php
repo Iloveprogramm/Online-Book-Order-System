@@ -66,12 +66,6 @@
       </script>
 
     </div>
-    <div class="mt-5">
-      <h3 class="section-heading">Add Review</h3>
-      <hr class="section-divider">
-      <p>Users can make reviews for books they have read.</p>
-      <a href="addReview.php" class="btn btn-primary btn-lg">Add Review</a>
-    </div>
     
     <div class="mt-5">
       <h3 class="section-heading">All Reviews</h3>

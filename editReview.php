@@ -12,6 +12,7 @@
 </head>
 <body>
 
+
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg">
     <div class="container">
@@ -60,16 +61,20 @@
     <p>Share and read reviews</p>
 </section>
 
-<?php
-    // get book ID and title from URL 
-    $bookID = $_GET['bookID'];
-    $bookTitle = urldecode($_GET['bookTitle']); 
+<?php 
+
+$ReviewerName = $ReviewData['ReviewerName'];
+$rating = $ReviewData['Rating'];
+$reviewText = $ReviewData['ReviewText'];
+
+echo " jefsildf";
 ?>
+
 
 <main>
     <div class="container mt-5">
-        <h1>Add Review</h1>
-        <form id="addReviewForm" method="POST", action="addReviewProcess.php">
+        <h1>Edit Review</h1>
+        <form id="editReviewForm" method="POST" action="editReviewProcess.php">
             <div class="mb-3">
                 <label for="bookID" class="form-label">Book Name:</label>
                 <input type="text" class="form-control" id="bookID" name="bookTitle" value="<?php echo $bookTitle; ?>" readonly>
@@ -77,18 +82,18 @@
             </div>
             <div class="mb-3">
                 <label for="reviewerName" class="form-label">Your Name:</label>
-                <input type="text" class="form-control" id="reviewerName" name="reviewerName" required>
+                <input type="text" class="form-control" id="reviewerName" name="reviewerName" value="<?php echo $reviewerName; ?>" required>
             </div>
             <div class="mb-3">
                 <label for="rating" class="form-label">Rating (1-5):</label>
-                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" value="<?php echo $rating; ?>" required>
             </div>
             <div class="mb-3">
                 <label for="reviewText" class="form-label">Review:</label>
-                <textarea class="form-control" id="reviewText" name="reviewText" rows="4" required></textarea>
+                <textarea class="form-control" id="reviewText" name="reviewText" rows="4" required><?php echo $reviewText; ?></textarea>
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Submit Review</button>
+                <button type="submit" class="btn btn-primary">Update Review</button>
             </div>
         </form>
     </div>

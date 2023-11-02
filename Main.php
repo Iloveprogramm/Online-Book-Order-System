@@ -376,6 +376,8 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
             echo '<p class="card-text mb-2">$' . number_format($row["Price"], 2) . '</p>';
             echo '<button class="btn btn-outline-primary mt-auto" onclick="addToCart(event, ' . $row["BookID"] . ')">Add to Cart</button>';
             echo '<button class="btn btn-outline-primary mt-auto" onclick="addToWishlist(event, ' . $row["BookID"] . ')">Wishlist</button>';  // 添加 event 参数
+            echo '<a href="addReview.php?bookID=' . $row["BookID"] . '&bookTitle=' . urlencode($row["Title"]) . '" class="btn btn-outline-primary mt-auto">Add Review</a>';
+
             echo '</div>';
             echo '</div>';
             echo '</div>';
