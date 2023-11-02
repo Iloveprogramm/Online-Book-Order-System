@@ -299,7 +299,7 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 <!-- Hero Section -->
 <section class="hero-section">
-    <h1>Welcome to BookQuartets</h1>
+    <h1>Welcome to BQ</h1>
     <p>Your premium book destination</p>
 </section>
 
