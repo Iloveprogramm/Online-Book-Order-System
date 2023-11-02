@@ -62,12 +62,10 @@
 </section>
 
 <?php 
-
-$ReviewerName = $ReviewData['ReviewerName'];
-$rating = $ReviewData['Rating'];
-$reviewText = $ReviewData['ReviewText'];
-
-echo " jefsildf";
+$ReviewID = $_GET['ReviewID'];
+$ReviewerName = urldecode($_GET['ReviewerName']);
+$Rating = $_GET['Rating'];
+$ReviewText = urldecode($_GET['ReviewText']);
 ?>
 
 
@@ -76,21 +74,21 @@ echo " jefsildf";
         <h1>Edit Review</h1>
         <form id="editReviewForm" method="POST" action="editReviewProcess.php">
             <div class="mb-3">
-                <label for="bookID" class="form-label">Book Name:</label>
-                <input type="text" class="form-control" id="bookID" name="bookTitle" value="<?php echo $bookTitle; ?>" readonly>
-                <input type="hidden" name="bookID" value="<?php echo $bookID; ?>">
+                <label for="BookID" class="form-label">Book Name:</label>
+                <input type="text" class="form-control" id="BookID" name="BookTitle" value="<?php echo $BookTitle; ?>" readonly>
+                <input type="hidden" name="BookID" value="<?php echo $BookID; ?>">
             </div>
             <div class="mb-3">
-                <label for="reviewerName" class="form-label">Your Name:</label>
-                <input type="text" class="form-control" id="reviewerName" name="reviewerName" value="<?php echo $reviewerName; ?>" required>
+                <label for="ReviewerName" class="form-label">Your Name:</label>
+                <input type="text" class="form-control" id="ReviewerName" name="ReviewerName" value="<?php echo $ReviewerName; ?>" required>
             </div>
             <div class="mb-3">
-                <label for="rating" class="form-label">Rating (1-5):</label>
-                <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" value="<?php echo $rating; ?>" required>
+                <label for="Rating" class="form-label">Rating (1-5):</label>
+                <input type="number" class="form-control" id="Rating" name="Rating" min="1" max="5" value="<?php echo $Rating; ?>" required>
             </div>
             <div class="mb-3">
-                <label for="reviewText" class="form-label">Review:</label>
-                <textarea class="form-control" id="reviewText" name="reviewText" rows="4" required><?php echo $reviewText; ?></textarea>
+                <label for="ReviewText" class="form-label">Review:</label>
+                <textarea class="form-control" id="ReviewText" name="ReviewText" rows="4" required><?php echo $ReviewText; ?></textarea>
             </div>
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Update Review</button>
@@ -100,24 +98,29 @@ echo " jefsildf";
 </main>
 
 <script>
-document.querySelector('#addReviewForm').addEventListener('submit', function(e) {
+document.querySelector('#editReviewForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     let formData = new FormData(e.target);
-    // Get php function
-    fetch('addReviewProcess.php', {
+
+    fetch('editReviewProcess.php', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
     .then(data => {
         if (data.status === 'success') {
-            // Show success message
-            alert('Review added successfully!');
-            // Redirect to reviewMain.php
+            // success message
+            alert('Review updated successfully!');
+            // redirect
             window.location.href = 'reviewMain.php';
         } else {
-            // Show error message
+            // error message
             alert('Error: ' + data.message);
         }
     })
@@ -127,6 +130,7 @@ document.querySelector('#addReviewForm').addEventListener('submit', function(e) 
         alert('An error has occurred. Please try again later.');
     });
 });
+
 </script>
 
 
