@@ -55,3 +55,17 @@ steps:
     ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
   displayName: 'Pass the specific Payment Test (PHPUnit Test)'
   
+# Copy files to the staging directory
+- task: CopyFiles@2
+  displayName: 'Copy Files to Staging Directory'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'  
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+# Publish build artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
