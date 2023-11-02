@@ -61,7 +61,8 @@ steps:
   inputs:
     serverUrl: 'ftp://files.000webhost.com'
     username: 'onlinebookorder'
-    password: '您的网站密码'
+    password: 'Zcj030366*'
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
     filePatterns: '**'
     remoteDirectory: '/public_html'
+
