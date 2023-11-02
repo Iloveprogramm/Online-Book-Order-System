@@ -59,7 +59,7 @@ steps:
 
 - task: FtpUpload@2
   inputs:
-    serverUrl: 'MyFTPConnection'
+    serverEndpoint: 'MyFTPConnection'
     username: 'onlinebookorder'
     password: 'Zcj030366*'
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
