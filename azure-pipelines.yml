@@ -16,69 +16,52 @@ services:
       MYSQL_USER: testuser
       MYSQL_PASSWORD: TestPass123!
 
-stages:
-- stage: BuildTest
-  jobs:
-  - job: BuildAndTest
-    steps:
-    - script: |
-        sudo apt-get update 
-        sudo apt-get install -y php php-mysqli
-        wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
-        chmod +x phpunit
-      displayName: 'Setup PHPUnit'
+steps:
+- script: |
+    sudo apt-get update 
+    sudo apt-get install -y php php-mysqli
+    wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
+    chmod +x phpunit
+  displayName: 'Setup PHPUnit'
 
-    - script: |
-        until echo exit | nc localhost 3306; do sleep 10; done
-      displayName: 'Wait for MySQL DataBase to be ready'
+- script: |
+    until echo exit | nc localhost 3306; do sleep 10; done
+  displayName: 'Wait for MySQL DataBase to be ready'
 
-    - script: |
-        mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
-        mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
-      displayName: 'Grant permissions to testuser'
+- script: |
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
+  displayName: 'Grant permissions to testuser'
 
-    - script: |
-        mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
-      displayName: 'Run database.sql'
+- script: |
+    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
+  displayName: 'Run database.sql'
 
-    - script: |
-        ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
-      displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
+- script: |
+    ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
+  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
 
-    - script: |
-        ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
-      displayName: 'Pass the specific Payment Test (PHPUnit Test)'
-  
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(Build.SourcesDirectory)'
-        Contents: '**'  
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- script: |
+    ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
+  displayName: 'Pass the specific Payment Test (PHPUnit Test)'
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'  
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-- stage: Deploy
-  dependsOn: BuildTest
-  condition: succeeded()
-  jobs:
-  - deployment: DeployToFtp
-    environment: 'production'
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - download: current
-      artifact: drop
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
-    - task: FtpUpload@2
-      inputs:
-        serverUrl: 'ftp://files.000webhost.com'
-        username: 'onlinebookorder'
-        password: '您的网站密码'
-        rootDirectory: '$(Pipeline.Workspace)/drop' 
-        filePatterns: '**'
-        remoteDirectory: '/public_html' 
-
+- task: FtpUpload@2
+  inputs:
+    serverUrl: 'ftp://files.000webhost.com'
+    username: 'onlinebookorder'
+    password: '您的网站密码'
+    rootDirectory: '$(Build.ArtifactStagingDirectory)'
+    filePatterns: '**'
+    remoteDirectory: '/public_html'
