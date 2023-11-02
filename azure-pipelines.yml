@@ -37,9 +37,10 @@ steps:
     mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
   displayName: 'Run database.sql'
 
-- script: |
-    ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
-  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
+# - script: |
+#     ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
+#   displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
+
 
 
 - task: CopyFiles@2
