@@ -73,11 +73,11 @@ $ReviewText = urldecode($_GET['ReviewText']);
     <div class="container mt-5">
         <h1>Edit Review</h1>
         <form id="editReviewForm" method="POST" action="editReviewProcess.php">
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="BookID" class="form-label">Book Name:</label>
                 <input type="text" class="form-control" id="BookID" name="BookTitle" value="<?php echo $BookTitle; ?>" readonly>
                 <input type="hidden" name="BookID" value="<?php echo $BookID; ?>">
-            </div>
+            </div> -->
             <div class="mb-3">
                 <label for="ReviewerName" class="form-label">Your Name:</label>
                 <input type="text" class="form-control" id="ReviewerName" name="ReviewerName" value="<?php echo $ReviewerName; ?>" required>
