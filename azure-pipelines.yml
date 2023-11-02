@@ -1,12 +1,9 @@
-# Azure Pipeline configuration
 trigger:
 - main
 
-# Using the latest version of the Ubuntu virtual machine
 pool:
   vmImage: ubuntu-latest
 
-# Configuring MySQL Services
 services:
   mysql:
     image: mysql:5.7
@@ -19,55 +16,69 @@ services:
       MYSQL_USER: testuser
       MYSQL_PASSWORD: TestPass123!
 
-# Step
-steps:
+stages:
+- stage: BuildTest
+  jobs:
+  - job: BuildAndTest
+    steps:
+    - script: |
+        sudo apt-get update 
+        sudo apt-get install -y php php-mysqli
+        wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
+        chmod +x phpunit
+      displayName: 'Setup PHPUnit'
 
-# Install PHP and configure PHPUnit
-- script: |
-    sudo apt-get update 
-    sudo apt-get install -y php php-mysqli
-    wget -O phpunit https://phar.phpunit.de/phpunit-9.phar
-    chmod +x phpunit
-  displayName: 'Setup PHPUnit'
+    - script: |
+        until echo exit | nc localhost 3306; do sleep 10; done
+      displayName: 'Wait for MySQL DataBase to be ready'
 
-# Wait for MySQL to be ready
-- script: |
-    until echo exit | nc localhost 3306; do sleep 10; done
-  displayName: 'Wait for MySQL DataBase to be ready'
+    - script: |
+        mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
+        mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
+      displayName: 'Grant permissions to testuser'
 
-# Grant permissions to testuser
-- script: |
-    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
-    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
-  displayName: 'Grant permissions to testuser'
+    - script: |
+        mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
+      displayName: 'Run database.sql'
 
-# Load database
-- script: |
-    mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
-  displayName: 'Run database.sql'
+    - script: |
+        ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
+      displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
 
-# Running tests
-- script: |
-    ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
-  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
-
-- script: |
-    ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
-  displayName: 'Pass the specific Payment Test (PHPUnit Test)'
+    - script: |
+        ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
+      displayName: 'Pass the specific Payment Test (PHPUnit Test)'
   
-# Copy files to the staging directory
-- task: CopyFiles@2
-  displayName: 'Copy Files to Staging Directory'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**'  
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: '**'  
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# Publish build artifacts
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
 
+- stage: Deploy
+  dependsOn: BuildTest
+  condition: succeeded()
+  jobs:
+  - deployment: DeployToFtp
+    environment: 'production'
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - download: current
+      artifact: drop
+
+    - task: FtpUpload@2
+      inputs:
+        serverUrl: 'ftp://files.000webhost.com'
+        username: 'onlinebookorder'
+        password: '您的网站密码'
+        rootDirectory: '$(Pipeline.Workspace)/drop' 
+        filePatterns: '**'
+        remoteDirectory: '/public_html' 
 
