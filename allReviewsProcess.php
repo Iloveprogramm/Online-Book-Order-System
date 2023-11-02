@@ -15,12 +15,13 @@ function displayAllReviews() {
             echo '<div class="card shadow-sm">';
             echo '<div class="card-body">';
             
-
             echo '<h5 class="card-title">' . htmlspecialchars($row["Title"]) . '</h5>'; 
             
             echo '<h6 class="card-subtitle mb-2 text-muted">' . htmlspecialchars($row["ReviewerName"]) . '</h6>';
             echo '<p class="card-text">' . htmlspecialchars($row["ReviewText"]) . '</p>';
             echo '<p class="card-text">Rating: ' . htmlspecialchars($row["Rating"]) . '</p>';
+            // Security: sanitize and escape so we can prevent XSS attacks
+            echo '<button class="btn btn-primary" onclick="redirectToEdit(' . $row["ReviewID"] . ', \'' . htmlspecialchars($row["ReviewerName"], ENT_QUOTES) . '\', ' . $row["Rating"] . ', \'' . htmlspecialchars($row["ReviewText"], ENT_QUOTES) . '\', ' . $row["ReviewID"] . ')">Edit</button>';
             echo '<button class="btn btn-danger" onclick="confirmDelete(' . $row["ReviewID"] . ')">Delete</button>';
             echo '</div>';
             echo '</div>';
@@ -37,6 +38,16 @@ function displayAllReviews() {
 ?>
 
 <script>
+
+function redirectToEdit(ReviewID, ReviewerName, Rating, ReviewText, BookID) {
+    window.location.href = 'editReview.php?ReviewID=' + ReviewID +
+                          '&ReviewerName=' + encodeURIComponent(ReviewerName) +
+                          '&Rating=' + Rating +
+                          '&ReviewText=' + encodeURIComponent(ReviewText) +
+                          '&BookID=' + BookID;
+}
+
+
 function confirmDelete(reviewId) {
     if (confirm('Are you sure you want to delete this review?')) {
         deleteReview(reviewId);
