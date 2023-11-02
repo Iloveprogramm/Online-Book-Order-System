@@ -5,15 +5,15 @@ body {
     animation: spin 20s infinite linear;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
     margin: 0;
 }
 
 .payment-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    overflow-y: auto;
+    min-height: 100vh; 
 }
 
 .payment-box {
