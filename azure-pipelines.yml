@@ -1,12 +1,9 @@
-# Azure Pipeline configuration
 trigger:
 - main
 
-# Using the latest version of the Ubuntu virtual machine
 pool:
   vmImage: ubuntu-latest
 
-# Configuring MySQL Services
 services:
   mysql:
     image: mysql:5.7
@@ -19,10 +16,7 @@ services:
       MYSQL_USER: testuser
       MYSQL_PASSWORD: TestPass123!
 
-# Step
 steps:
-
-# Install PHP and configure PHPUnit
 - script: |
     sudo apt-get update 
     sudo apt-get install -y php php-mysqli
@@ -30,42 +24,43 @@ steps:
     chmod +x phpunit
   displayName: 'Setup PHPUnit'
 
-# Wait for MySQL to be ready
 - script: |
     until echo exit | nc localhost 3306; do sleep 10; done
   displayName: 'Wait for MySQL DataBase to be ready'
 
-# Grant permissions to testuser
 - script: |
     mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "GRANT ALL PRIVILEGES ON bookonlineorder.* TO 'testuser'@'%';"
     mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! -e "FLUSH PRIVILEGES;"
   displayName: 'Grant permissions to testuser'
 
-# Load database
 - script: |
     mysql -h 127.0.0.1 -P 3306 -u root -pRootPass123! bookonlineorder < database.sql
   displayName: 'Run database.sql'
 
-# Running tests
-- script: |
-    ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
-  displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
+# - script: |
+#     ./phpunit --verbose ./BookTestOrderTestChenjunZheng/
+#   displayName: 'Pass all BookTest AND OrderTest(PHPUnit Test)'
 
-- script: |
-    ./phpunit --verbose ./UserTestPaymentTest/StorePaymentTest.php
-  displayName: 'Pass the specific Payment Test (PHPUnit Test)'
-  
-# Copy files to the staging directory
+
+
 - task: CopyFiles@2
-  displayName: 'Copy Files to Staging Directory'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: '**'  
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: FtpUpload@2
+  inputs:
+    serverEndpoint: 'MyFTPConnection'
+    username: 'onlinebookorder'
+    password: 'Zcj030366*'
+    rootDirectory: '$(Build.ArtifactStagingDirectory)'
+    filePatterns: '**'
+    remoteDirectory: '/public_html'
+

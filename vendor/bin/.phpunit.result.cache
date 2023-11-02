@@ -1,1 +1,0 @@
-{"version":1,"defects":{"DeleteReviewTest::testDeleteReviewSuccess":8,"DeleteReviewTest::testDeleteReviewError":8,"addBookTest::testAddBookToDatabase":8},"times":{"DeleteReviewTest::testDeleteReviewSuccess":0.006,"DeleteReviewTest::testDeleteReviewError":0,"addBookTest::testAddBookToDatabase":0.011}}

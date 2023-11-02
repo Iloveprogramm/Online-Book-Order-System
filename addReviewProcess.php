@@ -4,12 +4,12 @@
 function addReviewToDatabase($data)
 {
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "bookonlineorder";
+$username = "id21490898_uts";
+$password = "Zcj030366*";
+$dbname = "id21490898_onlinebookorder";
 
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+// Create a database connection
+$conn = new mysqli($servername, $username, $password, $dbname);
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);

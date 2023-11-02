@@ -257,7 +257,7 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item me-3">
-                    <a class="nav-link" href="userprofile.html">
+                    <a class="nav-link" href="userprofile.php">
                         <i class="fas fa-user"></i> Profile
                     </a>
                 </li>
@@ -299,7 +299,7 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 <!-- Hero Section -->
 <section class="hero-section">
-    <h1>Welcome to BookQuartets</h1>
+    <h1>Welcome to BQ</h1>
     <p>Your premium book destination</p>
 </section>
 
