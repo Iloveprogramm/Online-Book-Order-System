@@ -1,18 +1,11 @@
 <?php
 
-$servername = "localhost";
-$username = "id21490898_uts";
-$password = "Zcj030366*";
-$dbname = "id21490898_onlinebookorder";
-
-
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-<?php
 include("dbConnection.php");
 
     $conn = getConnection();
