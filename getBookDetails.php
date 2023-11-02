@@ -1,9 +1,9 @@
 <?php
     $bookId = $_GET['book_id'];
     $servername = "localhost";
-$username = "id21490898_uts";
-$password = "Zcj030366*";
-$dbname = "id21490898_onlinebookorder";
+        $username = "root";
+        $password = "";
+        $dbname = "bookonlineorder";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
