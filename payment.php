@@ -17,7 +17,6 @@
     <div class="ripple"></div>
 </div>
 
-
 <div class="payment-container">
     <div class="payment-box">
         <h2>Payment Details</h2>
@@ -53,7 +52,6 @@
                     {
                         $numberOfItems = 0; // Or another default value
                     }
-
                     
                     $servername = "localhost";
                     $username = "root";
@@ -103,7 +101,6 @@
                 ?>
             </div>
         </div>
-
 
         <!-- item cost -->
         <div class="total-container">

@@ -49,6 +49,12 @@ if ($result->num_rows === 1) {
     exit;
 }
 
+if ($login_successful) {
+    $_SESSION['username'] = $username;
+    header("Location: user_profile.php");
+    exit;
+}
+
 $stmt->close();
 $conn->close();
 ?>

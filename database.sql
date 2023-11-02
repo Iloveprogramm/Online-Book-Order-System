@@ -96,6 +96,10 @@ CREATE TABLE IF NOT EXISTS payment_details (
     FOREIGN KEY (order_id) REFERENCES Orders(id)
 );
 
+ALTER TABLE payment_details ADD user_id VARCHAR(100);
+
+ALTER TABLE payment_details ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES UserTable(user_id);
+
 CREATE TABLE shipment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(100) NOT NULL,
