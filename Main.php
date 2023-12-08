@@ -346,10 +346,10 @@ $currentUserId = isset($_SESSION['username']) ? $_SESSION['username'] : '';
     <div class="row gy-4">
 
 <?php
-    $servername = "localhost";
-    $username = "id21490898_uts";
-    $password = "Zcj030366*";
-    $dbname = "id21490898_onlinebookorder";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "bookonlineorder";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
