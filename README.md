@@ -4,6 +4,31 @@
 
 An online platform for book enthusiasts to explore, select, and purchase their favorite reads from the comfort of their home. The website aims to provide an easy-to-use interface for all age groups.
 
+## Tech Stack Overview
+
+### Frontend Technologies
+1. **HTML, CSS, JavaScript**: Used for building user interfaces and frontend interactions.
+2. **Bootstrap Framework**: Employed for frontend design, providing responsive layouts and components.
+
+### Backend Technology
+1. **PHP**: Serves as the server-side scripting language for backend logic.
+2. **PHPUnit**: Used for unit testing in PHP, ensuring code quality.
+
+### Server and Database
+1. **XAMPP**: Includes Apache server, MySQL database, PHP, and Perl.
+2. **MySQL**: Part of XAMPP, used for data storage and management.
+
+### Continuous Integration and Continuous Deployment (CI/CD) & Automated Testing
+1. **Azure**: Utilized for CI/CD processes and automated testing.
+2. **Pipeline (YAML File)**: Configuration file defining the CI/CD processes.
+
+### Email Service
+1. **PHPMailer**: Used for sending emails, supporting various email sending protocols.
+
+### Deployment and File Transfer
+1. **000webhost**: Web hosting service for deploying applications.
+2. **FTP**: File Transfer Protocol used for uploading files to 000webhost.
+
 # Team：
 
 
@@ -113,5 +138,4 @@ Visual Studio is an integrated development environment (IDE) developed by Micros
 
 XAMPP is a free and open-source cross-platform web server solution stack package, consisting mainly of the Apache HTTP Server, MySQL database, and interpreters for scripts 
 
-
-
+# IDE(Visual studio) and Server(Xampp)
